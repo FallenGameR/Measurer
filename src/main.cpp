@@ -309,28 +309,28 @@ Height: 240
     Serial.println(y);
 
     Graph(
-        tft,                   // &d name of your display object
-        x,                     // x = x data point
-        y,                     // y = y datapont
-        50,                    // gx = x graph location (lower left)
-        290,                   // gy = y graph location (lower left)
-        tft.width(),           // w = width of graph
-        tft.height(),          // h = height of graph
-        0,                     // xlo = lower bound of x axis
-        60,                    // xhi = upper bound of x asis
-        10,                    //  xinc = division of x axis (distance not count)
-        10,                    // ylo = lower bound of y axis
-        40,                    // yhi = upper bound of y asis
-        5,                     // yinc = division of y axis (distance not count)
-        "Room Temperature",    // title = title of graph
-        " Time [s]",           // xlabel = x asis label
-        "Temperature [deg C]", // ylabel = y asis label
-        DKBLUE,                // gcolor = graph line colors
-        RED,                   // acolor = axi ine colors
-        GREEN,                 // pcolor = color of your plotted data
-        WHITE,                 // tcolor = text color
-        BLACK,                 // bcolor = background color
-        display7);             // &redraw = flag to redraw graph on fist call only
+        tft,                    // &d name of your display object
+        x,                      // x = x data point
+        y,                      // y = y datapont
+        50,                     // gx = x graph location (lower left) - needed for y axes numbers
+        tft.height() - 30,      // gy = y graph location (lower left) - needed for x axes numbers and title
+        tft.width() - 50 - 30,  // w = width of graph                 - needed for y and x axes numbers
+        tft.height() - 30 - 30, // h = height of graph                - needed for title
+        0,                      // xlo = lower bound of x axis
+        60,                     // xhi = upper bound of x asis
+        10,                     // xinc = division of x axis (distance not count)
+        20,                     // ylo = lower bound of y axis
+        30,                     // yhi = upper bound of y asis
+        1,                      // yinc = division of y axis (distance not count)
+        "Room Temperature",     // title = title of graph
+        " Time [s]",            // xlabel = x asis label
+        "Temperature [deg C]",  // ylabel = y asis label
+        DKBLUE,                 // gcolor = graph line colors
+        RED,                    // acolor = axi ine colors
+        GREEN,                  // pcolor = color of your plotted data
+        WHITE,                  // tcolor = text color
+        BLACK,                  // bcolor = background color
+        display7);              // &redraw = flag to redraw graph on fist call only
     delay(250);
   }
 
