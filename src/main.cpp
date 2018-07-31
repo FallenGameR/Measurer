@@ -274,6 +274,10 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
   oy = y;
 }
 
+#define X_AXES_PADDING 50
+#define Y_AXES_PADDING 30
+#define TITLE_PADDING 30
+
 void setup()
 {
   Serial.begin(9600);
@@ -286,14 +290,7 @@ void setup()
   Serial.print("Height: ");
   Serial.println(tft.height());
 
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setTextSize(8);
-
-  /*
-Width: 320
-Height: 240
-*/
+  tft.fillScreen(BLACK);
 
   for (double x = 0; x <= 60; x += 1)
   {
@@ -309,32 +306,31 @@ Height: 240
     Serial.println(y);
 
     Graph(
-        tft,                    // &d name of your display object
-        x,                      // x = x data point
-        y,                      // y = y datapont
-        50,                     // gx = x graph location (lower left) - needed for y axes numbers
-        tft.height() - 30,      // gy = y graph location (lower left) - needed for x axes numbers and title
-        tft.width() - 50 - 30,  // w = width of graph                 - needed for y and x axes numbers
-        tft.height() - 30 - 30, // h = height of graph                - needed for title
-        0,                      // xlo = lower bound of x axis
-        60,                     // xhi = upper bound of x asis
-        10,                     // xinc = division of x axis (distance not count)
-        20,                     // ylo = lower bound of y axis
-        30,                     // yhi = upper bound of y asis
-        1,                      // yinc = division of y axis (distance not count)
-        "Room Temperature",     // title = title of graph
-        " Time [s]",            // xlabel = x asis label
-        "Temperature [deg C]",  // ylabel = y asis label
-        DKBLUE,                 // gcolor = graph line colors
-        RED,                    // acolor = axi ine colors
-        GREEN,                  // pcolor = color of your plotted data
-        WHITE,                  // tcolor = text color
-        BLACK,                  // bcolor = background color
-        display7);              // &redraw = flag to redraw graph on fist call only
-    delay(250);
+        tft,                                           // &d name of your display object
+        x,                                             // x = x data point
+        y,                                             // y = y datapont
+        X_AXES_PADDING,                                // gx = x graph location (lower left) - needed for y axes numbers
+        tft.height() - Y_AXES_PADDING,                 // gy = y graph location (lower left) - needed for x axes numbers and title
+        tft.width() - X_AXES_PADDING - 1,              // w = width of graph                 - needed for y and last x axes numbers
+        tft.height() - Y_AXES_PADDING - TITLE_PADDING, // h = height of graph                - needed for title
+        0,                                             // xlo = lower bound of x axis
+        60,                                            // xhi = upper bound of x asis
+        10,                                            // xinc = division of x axis (distance not count)
+        20,                                            // ylo = lower bound of y axis
+        30,                                            // yhi = upper bound of y asis
+        1,                                             // yinc = division of y axis (distance not count)
+        "Room Temperature",                            // title = title of graph
+        " Time [s]",                                   // xlabel = x asis label
+        "Temperature [deg C]",                         // ylabel = y asis label
+        DKBLUE,                                        // gcolor = graph line colors
+        RED,                                           // acolor = axi ine colors
+        GREEN,                                         // pcolor = color of your plotted data
+        WHITE,                                         // tcolor = text color
+        BLACK,                                         // bcolor = background color
+        display7);                                     // &redraw = flag to redraw graph on fist call only
+    delay(1000);
   }
 
-  delay(1000);
   tft.fillScreen(BLACK);
 }
 
@@ -353,6 +349,9 @@ void printReadings()
 
 void loop(void)
 {
+  tft.setTextColor(WHITE);
+  tft.setTextSize(8);
+
   byte new_temperature = 0;
   byte new_humidity = 0;
   byte data[40] = {0};
