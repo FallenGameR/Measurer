@@ -276,13 +276,15 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
   oy = y;
 }
 
+int tempPin = 5;
+
 void setup()
 {
   Serial.begin(9600);
   Serial.println("ILI9341 Test!");
 
   tft.begin();
-  //tft.fillScreen(ILI9341_BLACK);
+  tft.fillScreen(ILI9341_BLACK);
   tft.setRotation(1);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(8);
@@ -411,6 +413,20 @@ void printReadings()
 
 void loop(void)
 {
+  /*
+  termistor says it is +1.5 celsious more...
+
+  int tempReading = analogRead(tempPin);
+  double tempK = log(10000.0 * ((1024.0 / tempReading - 1)));
+  tempK = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * tempK * tempK)) * tempK); //  Temp Kelvin
+  float tempC = tempK - 273.15;                                                          // Convert Kelvin to Celcius
+  float tempF = (tempC * 9.0) / 5.0 + 32.0;                                              // Convert Celcius to Fahrenheit
+
+  tft.println(tempC);
+  delay(1000);
+  return;
+*/
+
   byte new_temperature = 0;
   byte new_humidity = 0;
   byte data[40] = {0};
