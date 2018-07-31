@@ -320,7 +320,7 @@ void setup()
         30,                                            // yhi = upper bound of y asis
         1,                                             // yinc = division of y axis (distance not count)
         "Room Temperature",                            // title = title of graph
-        " Time [s]",                                   // xlabel = x asis label
+        "Time [s]",                                    // xlabel = x asis label
         "Temperature [deg C]",                         // ylabel = y asis label
         DKBLUE,                                        // gcolor = graph line colors
         RED,                                           // acolor = axi ine colors
@@ -328,7 +328,7 @@ void setup()
         WHITE,                                         // tcolor = text color
         BLACK,                                         // bcolor = background color
         display7);                                     // &redraw = flag to redraw graph on fist call only
-    delay(1000);
+    delay(250);
   }
 
   tft.fillScreen(BLACK);
