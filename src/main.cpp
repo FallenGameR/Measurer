@@ -287,6 +287,8 @@ void setup()
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(8);
 
+  return;
+
   tft.fillScreen(BLACK);
   a1 = 3.354016E-03;
   b1 = 2.569850E-04;
