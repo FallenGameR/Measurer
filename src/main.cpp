@@ -79,7 +79,7 @@ Pin settings
 #define TFT_RST 0
 #define TFT_MISO 0
 
-#define ADJ_PIN A0
+#define ADJ_PIN A5
 
 // for DHT11,
 //      VCC: 5V or 3V
@@ -136,8 +136,6 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_R
 #define DKPINK 0x9009
 #define DKPURPLE 0x4010
 #define DKGREY 0x4A49
-
-double a1, b1, c1, d1, r2, r1, vo, tempC, tempF, tempK;
 
 //Adafruit_HX8357 tft = Adafruit_HX8357(TFT_CS, TFT_DC);
 
@@ -276,121 +274,63 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
   oy = y;
 }
 
-int tempPin = 5;
-
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("ILI9341 Test!");
 
   tft.begin();
-  tft.fillScreen(ILI9341_BLACK);
   tft.setRotation(1);
+  Serial.println("ILI9341 screen");
+  Serial.print("Width: ");
+  Serial.println(tft.width());
+  Serial.print("Height: ");
+  Serial.println(tft.height());
+
+  tft.fillScreen(ILI9341_BLACK);
   tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(8);
 
-  return;
+  /*
+Width: 320
+Height: 240
+*/
 
-  tft.fillScreen(BLACK);
-  a1 = 3.354016E-03;
-  b1 = 2.569850E-04;
-  c1 = 2.620131E-06;
-  d1 = 6.383091E-08;
-
-  double x, y;
-
-  for (x = 0; x <= 6.3; x += .1)
+  for (double x = 0; x <= 60; x += 1)
   {
+    int vo = analogRead(ADJ_PIN);
 
-    y = sin(x);
-    Graph(tft, x, y, 60, 290, 390, 260, 0, 6.5, 1, -1, 1, .25, "Sin Function", "x", "sin(x)", DKBLUE, RED, YELLOW, WHITE, BLACK, display1);
-  }
+    //  Temp Kelvin
+    double tempK = log(10000.0 * ((1024.0 / vo - 1.0)));
+    tempK = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * tempK * tempK)) * tempK);
 
-  delay(1000);
+    // Convert Kelvin to Celcius
+    double y = tempK - 273.15;
 
-  tft.fillScreen(BLACK);
-  for (x = 0; x <= 6.3; x += .1)
-  {
+    Serial.println(y);
 
-    y = sin(x);
-    Graph(tft, x, y, 100, 280, 100, 240, 0, 6.5, 3.25, -1, 1, .25, "Sin Function", "x", "sin(x)", GREY, GREEN, RED, YELLOW, BLACK, display9);
-  }
-
-  delay(1000);
-
-  tft.fillScreen(BLACK);
-  for (x = 0; x <= 25.2; x += .1)
-  {
-
-    y = sin(x);
-    Graph(tft, x, y, 50, 190, 400, 60, 0, 25, 5, -1, 1, .5, "Sin Function", "x", "sin(x)", DKYELLOW, YELLOW, GREEN, WHITE, BLACK, display8);
-  }
-
-  delay(1000);
-
-  tft.fillScreen(BLACK);
-  for (x = 0.001; x <= 10; x += .1)
-  {
-
-    y = log(x);
-    Graph(tft, x, y, 50, 240, 300, 180, 0, 10, 1, -10, 5, 1, "Natural Log Function", "x", "ln(x)", BLUE, RED, WHITE, WHITE, BLACK, display2);
-  }
-
-  delay(1000);
-  tft.fillScreen(BLACK);
-
-  for (x = 0; x <= 10; x += 1)
-  {
-
-    y = x * x;
-    Graph(tft, x, y, 50, 290, 390, 260, 0, 10, 1, 0, 100, 10, "Square Function", "x", "x^2", DKRED, RED, YELLOW, WHITE, BLACK, display3);
-  }
-
-  delay(1000);
-  tft.fillScreen(BLACK);
-
-  for (x = 0.00; x <= 20; x += .01)
-  {
-
-    y = ((sin(x)) * x + cos(x)) - log(x);
-    Graph(tft, x, y, 50, 290, 390, 260, 0, 20, 1, -20, 20, 5, "Weird Function", "x", " y = sin(x) + cos(x) - log(x)", ORANGE, YELLOW, CYAN, WHITE, BLACK, display4);
-  }
-
-  delay(1000);
-  tft.fillScreen(BLACK);
-  tft.setRotation(2);
-  for (x = 0; x <= 12.6; x += .1)
-  {
-
-    y = sin(x);
-    Graph(tft, x, y, 50, 250, 150, 150, 0, 13, 3.5, -1, 1, 1, "Sin(x)", "x", "sin(x)", DKBLUE, RED, YELLOW, WHITE, BLACK, display5);
-  }
-  tft.setRotation(3);
-  delay(1000);
-  tft.fillScreen(WHITE);
-
-  for (x = 0; x <= 6.3; x += .05)
-  {
-
-    y = cos(x);
-    Graph(tft, x, y, 100, 250, 300, 200, 0, 6.5, 3.25, -1, 1, 1, "Cos Function", "x", "cos(x)", DKGREY, GREEN, BLUE, BLACK, WHITE, display6);
-  }
-
-  delay(1000);
-  tft.fillScreen(BLACK);
-
-  for (x = 0; x <= 60; x += 1)
-  {
-    vo = analogRead(ADJ_PIN) / 204.6;
-    r1 = 9940;
-    r2 = (vo * r1) / (5 - vo);
-
-    //equation from data sheet
-    tempK = 1.0 / (a1 + (b1 * (log(r2 / 10000.0))) + (c1 * pow(log(r2 / 10000.0), 2)) + (d1 * pow(log(r2 / 10000.0), 3)));
-    tempC = ((tempK - 273.15));
-    y = tempF = (tempC * 1.8000) + 32.00;
-
-    Graph(tft, x, y, 50, 290, 390, 260, 0, 60, 10, 70, 90, 5, "Room Temperature", " Time [s]", "Temperature [deg F]", DKBLUE, RED, GREEN, WHITE, BLACK, display7);
+    Graph(
+        tft,                   // &d name of your display object
+        x,                     // x = x data point
+        y,                     // y = y datapont
+        50,                    // gx = x graph location (lower left)
+        290,                   // gy = y graph location (lower left)
+        tft.width(),           // w = width of graph
+        tft.height(),          // h = height of graph
+        0,                     // xlo = lower bound of x axis
+        60,                    // xhi = upper bound of x asis
+        10,                    //  xinc = division of x axis (distance not count)
+        10,                    // ylo = lower bound of y axis
+        40,                    // yhi = upper bound of y asis
+        5,                     // yinc = division of y axis (distance not count)
+        "Room Temperature",    // title = title of graph
+        " Time [s]",           // xlabel = x asis label
+        "Temperature [deg C]", // ylabel = y asis label
+        DKBLUE,                // gcolor = graph line colors
+        RED,                   // acolor = axi ine colors
+        GREEN,                 // pcolor = color of your plotted data
+        WHITE,                 // tcolor = text color
+        BLACK,                 // bcolor = background color
+        display7);             // &redraw = flag to redraw graph on fist call only
     delay(250);
   }
 
@@ -413,20 +353,6 @@ void printReadings()
 
 void loop(void)
 {
-  /*
-  termistor says it is +1.5 celsious more...
-
-  int tempReading = analogRead(tempPin);
-  double tempK = log(10000.0 * ((1024.0 / tempReading - 1)));
-  tempK = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * tempK * tempK)) * tempK); //  Temp Kelvin
-  float tempC = tempK - 273.15;                                                          // Convert Kelvin to Celcius
-  float tempF = (tempC * 9.0) / 5.0 + 32.0;                                              // Convert Celcius to Fahrenheit
-
-  tft.println(tempC);
-  delay(1000);
-  return;
-*/
-
   byte new_temperature = 0;
   byte new_humidity = 0;
   byte data[40] = {0};
