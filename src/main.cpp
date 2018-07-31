@@ -81,7 +81,7 @@ Pin settings
 
 #define ADJ_PIN A0
 
-// for DHT11, 
+// for DHT11,
 //      VCC: 5V or 3V
 //      GND: GND
 //      DATA: 2
@@ -89,8 +89,6 @@ int pinDHT11 = 6;
 
 SimpleDHT11 dht11;
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
-
-
 
 // These are 'flexible' lines that can be changed
 
@@ -101,43 +99,43 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_R
 #define SD_CCS 42
 */
 
-#define LTBLUE    0xB6DF
-#define LTTEAL    0xBF5F
-#define LTGREEN   0xBFF7
-#define LTCYAN    0xC7FF
-#define LTRED     0xFD34
+#define LTBLUE 0xB6DF
+#define LTTEAL 0xBF5F
+#define LTGREEN 0xBFF7
+#define LTCYAN 0xC7FF
+#define LTRED 0xFD34
 #define LTMAGENTA 0xFD5F
-#define LTYELLOW  0xFFF8
-#define LTORANGE  0xFE73
-#define LTPINK    0xFDDF
-#define LTPURPLE  0xCCFF
-#define LTGREY    0xE71C
+#define LTYELLOW 0xFFF8
+#define LTORANGE 0xFE73
+#define LTPINK 0xFDDF
+#define LTPURPLE 0xCCFF
+#define LTGREY 0xE71C
 
-#define BLUE      0x001F
-#define TEAL      0x0438
-#define GREEN     0x07E0
-#define CYAN      0x07FF
-#define RED       0xF800
-#define MAGENTA   0xF81F
-#define YELLOW    0xFFE0
-#define ORANGE    0xFC00
-#define PINK      0xF81F
-#define PURPLE    0x8010
-#define GREY      0xC618
-#define WHITE     0xFFFF
-#define BLACK     0x0000
+#define BLUE 0x001F
+#define TEAL 0x0438
+#define GREEN 0x07E0
+#define CYAN 0x07FF
+#define RED 0xF800
+#define MAGENTA 0xF81F
+#define YELLOW 0xFFE0
+#define ORANGE 0xFC00
+#define PINK 0xF81F
+#define PURPLE 0x8010
+#define GREY 0xC618
+#define WHITE 0xFFFF
+#define BLACK 0x0000
 
-#define DKBLUE    0x000D
-#define DKTEAL    0x020C
-#define DKGREEN   0x03E0
-#define DKCYAN    0x03EF
-#define DKRED     0x6000
+#define DKBLUE 0x000D
+#define DKTEAL 0x020C
+#define DKGREEN 0x03E0
+#define DKCYAN 0x03EF
+#define DKRED 0x6000
 #define DKMAGENTA 0x8008
-#define DKYELLOW  0x8400
-#define DKORANGE  0x8200
-#define DKPINK    0x9009
-#define DKPURPLE  0x4010
-#define DKGREY    0x4A49
+#define DKYELLOW 0x8400
+#define DKORANGE 0x8200
+#define DKPINK 0x9009
+#define DKPURPLE 0x4010
+#define DKGREY 0x4A49
 
 double a1, b1, c1, d1, r2, r1, vo, tempC, tempF, tempK;
 
@@ -154,7 +152,7 @@ boolean display6 = true;
 boolean display7 = true;
 boolean display8 = true;
 boolean display9 = true;
-double ox , oy ;
+double ox, oy;
 
 /*
 
@@ -186,8 +184,8 @@ double ox , oy ;
   &redraw = flag to redraw graph on fist call only
 */
 
-
-void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double w, double h, double xlo, double xhi, double xinc, double ylo, double yhi, double yinc, String title, String xlabel, String ylabel, unsigned int gcolor, unsigned int acolor, unsigned int pcolor, unsigned int tcolor, unsigned int bcolor, boolean &redraw) {
+void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double w, double h, double xlo, double xhi, double xinc, double ylo, double yhi, double yinc, String title, String xlabel, String ylabel, unsigned int gcolor, unsigned int acolor, unsigned int pcolor, unsigned int tcolor, unsigned int bcolor, boolean &redraw)
+{
 
   double ydiv, xdiv;
   // initialize old x and old y in order to draw the first point of the graph
@@ -199,20 +197,24 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
   double temp;
   int rot, newrot;
 
-  if (redraw == true) {
+  if (redraw == true)
+  {
 
     redraw = false;
-    ox = (x - xlo) * ( w) / (xhi - xlo) + gx;
+    ox = (x - xlo) * (w) / (xhi - xlo) + gx;
     oy = (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
     // draw y scale
-    for ( i = ylo; i <= yhi; i += yinc) {
+    for (i = ylo; i <= yhi; i += yinc)
+    {
       // compute the transform
-      temp =  (i - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
+      temp = (i - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
 
-      if (i == 0) {
+      if (i == 0)
+      {
         d.drawLine(gx, temp, gx + w, temp, acolor);
       }
-      else {
+      else
+      {
         d.drawLine(gx, temp, gx + w, temp, gcolor);
       }
 
@@ -223,15 +225,18 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
       d.println(i);
     }
     // draw x scale
-    for (i = xlo; i <= xhi; i += xinc) {
+    for (i = xlo; i <= xhi; i += xinc)
+    {
 
       // compute the transform
 
-      temp =  (i - xlo) * ( w) / (xhi - xlo) + gx;
-      if (i == 0) {
+      temp = (i - xlo) * (w) / (xhi - xlo) + gx;
+      if (i == 0)
+      {
         d.drawLine(temp, gy, temp, gy - h, acolor);
       }
-      else {
+      else
+      {
         d.drawLine(temp, gy, temp, gy - h, gcolor);
       }
 
@@ -245,156 +250,148 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
     //now draw the labels
     d.setTextSize(2);
     d.setTextColor(tcolor, bcolor);
-    d.setCursor(gx , gy - h - 30);
+    d.setCursor(gx, gy - h - 30);
     d.println(title);
 
     d.setTextSize(1);
     d.setTextColor(acolor, bcolor);
-    d.setCursor(gx , gy + 20);
+    d.setCursor(gx, gy + 20);
     d.println(xlabel);
 
     d.setTextSize(1);
     d.setTextColor(acolor, bcolor);
     d.setCursor(gx - 30, gy - h - 10);
     d.println(ylabel);
-
-
   }
 
   //graph drawn now plot the data
   // the entire plotting code are these few lines...
   // recall that ox and oy are initialized as static above
-  x =  (x - xlo) * ( w) / (xhi - xlo) + gx;
-  y =  (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
+  x = (x - xlo) * (w) / (xhi - xlo) + gx;
+  y = (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
   d.drawLine(ox, oy, x, y, pcolor);
   d.drawLine(ox, oy + 1, x, y + 1, pcolor);
   d.drawLine(ox, oy - 1, x, y - 1, pcolor);
   ox = x;
   oy = y;
-
 }
 
-
-void setup() {
+void setup()
+{
   Serial.begin(9600);
-  Serial.println("ILI9341 Test!"); 
- 
+  Serial.println("ILI9341 Test!");
+
   tft.begin();
   //tft.fillScreen(ILI9341_BLACK);
   tft.setRotation(1);
-  tft.setTextColor(ILI9341_WHITE);  
+  tft.setTextColor(ILI9341_WHITE);
   tft.setTextSize(8);
 
   tft.fillScreen(BLACK);
-  a1 = 3.354016E-03 ;
-  b1 = 2.569850E-04 ;
-  c1 = 2.620131E-06 ;
-  d1 = 6.383091E-08 ;
-
+  a1 = 3.354016E-03;
+  b1 = 2.569850E-04;
+  c1 = 2.620131E-06;
+  d1 = 6.383091E-08;
 
   double x, y;
 
-  for (x = 0; x <= 6.3; x += .1) {
+  for (x = 0; x <= 6.3; x += .1)
+  {
 
     y = sin(x);
     Graph(tft, x, y, 60, 290, 390, 260, 0, 6.5, 1, -1, 1, .25, "Sin Function", "x", "sin(x)", DKBLUE, RED, YELLOW, WHITE, BLACK, display1);
-
   }
 
   delay(1000);
 
   tft.fillScreen(BLACK);
-  for (x = 0; x <= 6.3; x += .1) {
+  for (x = 0; x <= 6.3; x += .1)
+  {
 
     y = sin(x);
     Graph(tft, x, y, 100, 280, 100, 240, 0, 6.5, 3.25, -1, 1, .25, "Sin Function", "x", "sin(x)", GREY, GREEN, RED, YELLOW, BLACK, display9);
-
   }
 
-    delay(1000);
+  delay(1000);
 
   tft.fillScreen(BLACK);
-  for (x = 0; x <= 25.2; x += .1) {
+  for (x = 0; x <= 25.2; x += .1)
+  {
 
     y = sin(x);
     Graph(tft, x, y, 50, 190, 400, 60, 0, 25, 5, -1, 1, .5, "Sin Function", "x", "sin(x)", DKYELLOW, YELLOW, GREEN, WHITE, BLACK, display8);
-
   }
 
   delay(1000);
 
   tft.fillScreen(BLACK);
-  for (x = 0.001; x <= 10; x += .1) {
+  for (x = 0.001; x <= 10; x += .1)
+  {
 
     y = log(x);
     Graph(tft, x, y, 50, 240, 300, 180, 0, 10, 1, -10, 5, 1, "Natural Log Function", "x", "ln(x)", BLUE, RED, WHITE, WHITE, BLACK, display2);
-
   }
-
-  
 
   delay(1000);
   tft.fillScreen(BLACK);
 
-  for (x = 0; x <= 10; x += 1) {
+  for (x = 0; x <= 10; x += 1)
+  {
 
     y = x * x;
     Graph(tft, x, y, 50, 290, 390, 260, 0, 10, 1, 0, 100, 10, "Square Function", "x", "x^2", DKRED, RED, YELLOW, WHITE, BLACK, display3);
-
   }
 
   delay(1000);
   tft.fillScreen(BLACK);
 
-  for (x = 0.00; x <= 20; x += .01) {
+  for (x = 0.00; x <= 20; x += .01)
+  {
 
     y = ((sin(x)) * x + cos(x)) - log(x);
     Graph(tft, x, y, 50, 290, 390, 260, 0, 20, 1, -20, 20, 5, "Weird Function", "x", " y = sin(x) + cos(x) - log(x)", ORANGE, YELLOW, CYAN, WHITE, BLACK, display4);
-
   }
 
   delay(1000);
   tft.fillScreen(BLACK);
   tft.setRotation(2);
-  for (x = 0; x <= 12.6; x += .1) {
+  for (x = 0; x <= 12.6; x += .1)
+  {
 
     y = sin(x);
     Graph(tft, x, y, 50, 250, 150, 150, 0, 13, 3.5, -1, 1, 1, "Sin(x)", "x", "sin(x)", DKBLUE, RED, YELLOW, WHITE, BLACK, display5);
-
   }
   tft.setRotation(3);
   delay(1000);
   tft.fillScreen(WHITE);
 
-  for (x = 0; x <= 6.3; x += .05) {
+  for (x = 0; x <= 6.3; x += .05)
+  {
 
     y = cos(x);
     Graph(tft, x, y, 100, 250, 300, 200, 0, 6.5, 3.25, -1, 1, 1, "Cos Function", "x", "cos(x)", DKGREY, GREEN, BLUE, BLACK, WHITE, display6);
-
   }
 
   delay(1000);
   tft.fillScreen(BLACK);
 
-
-  for (x = 0; x <= 60; x += 1) {
+  for (x = 0; x <= 60; x += 1)
+  {
     vo = analogRead(ADJ_PIN) / 204.6;
     r1 = 9940;
-    r2 = ( vo * r1) / (5 - vo);
+    r2 = (vo * r1) / (5 - vo);
 
     //equation from data sheet
     tempK = 1.0 / (a1 + (b1 * (log(r2 / 10000.0))) + (c1 * pow(log(r2 / 10000.0), 2)) + (d1 * pow(log(r2 / 10000.0), 3)));
-    tempC  = ((tempK - 273.15) );
-    y = tempF  = (tempC * 1.8000) + 32.00;
+    tempC = ((tempK - 273.15));
+    y = tempF = (tempC * 1.8000) + 32.00;
 
     Graph(tft, x, y, 50, 290, 390, 260, 0, 60, 10, 70, 90, 5, "Room Temperature", " Time [s]", "Temperature [deg F]", DKBLUE, RED, GREEN, WHITE, BLACK, display7);
     delay(250);
   }
 
- delay(1000);
+  delay(1000);
   tft.fillScreen(BLACK);
-
-
 }
 
 byte temperature = 0;
@@ -402,46 +399,46 @@ byte humidity = 0;
 
 void printReadings()
 {
-  tft.setCursor(0, 0); 
+  tft.setCursor(0, 0);
   tft.print((int)temperature);
   tft.println(" C");
 
-  tft.print((int)humidity); 
+  tft.print((int)humidity);
   tft.println(" %");
 }
 
-void loop(void) {
+void loop(void)
+{
   byte new_temperature = 0;
   byte new_humidity = 0;
   byte data[40] = {0};
   int err = dht11.read(pinDHT11, &new_temperature, &new_humidity, data);
-  if (err) {
+  if (err)
+  {
     Serial.print("Read DHT11 failed, error: ");
     Serial.println(err);
     return;
   }
 
   bool needToErase = ((temperature != new_temperature) || (humidity != new_humidity));
-  if( needToErase )
+  if (needToErase)
   {
     Serial.println("erase");
 
-    tft.setTextColor(ILI9341_BLACK); 
+    tft.setTextColor(ILI9341_BLACK);
     printReadings();
-    
+
     temperature = new_temperature;
     humidity = new_humidity;
 
-    tft.setTextColor(ILI9341_WHITE);   
+    tft.setTextColor(ILI9341_WHITE);
     printReadings();
   }
   else
   {
     Serial.println("the same");
   }
-  
+
   // DHT11 sampling rate is 1HZ.
   delay(1300);
 }
-
-
