@@ -278,20 +278,8 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
 #define Y_AXES_PADDING 30
 #define TITLE_PADDING 30
 
-void setup()
+void drawTermistorReading()
 {
-  Serial.begin(9600);
-
-  tft.begin();
-  tft.setRotation(1);
-  Serial.println("ILI9341 screen");
-  Serial.print("Width: ");
-  Serial.println(tft.width());
-  Serial.print("Height: ");
-  Serial.println(tft.height());
-
-  tft.fillScreen(BLACK);
-
   for (double x = 0; x <= 60; x += 1)
   {
     int vo = analogRead(ADJ_PIN);
@@ -303,7 +291,7 @@ void setup()
     // Convert Kelvin to Celcius
     double y = tempK - 273.15;
 
-    Serial.println(y);
+    //Serial.println(y);
 
     Graph(
         tft,                                           // &d name of your display object
@@ -347,7 +335,7 @@ void printReadings()
   tft.println(" %");
 }
 
-void loop(void)
+void printDhtReadings()
 {
   tft.setTextColor(WHITE);
   tft.setTextSize(8);
@@ -384,4 +372,24 @@ void loop(void)
 
   // DHT11 sampling rate is 1HZ.
   delay(1300);
+}
+
+void setup()
+{
+  Serial.begin(9600);
+
+  tft.begin();
+  tft.setRotation(1);
+  Serial.println("ILI9341 screen");
+  Serial.print("Width: ");
+  Serial.println(tft.width());
+  Serial.print("Height: ");
+  Serial.println(tft.height());
+
+  tft.fillScreen(BLACK);
+}
+
+void loop(void)
+{
+  drawTermistorReading();
 }
