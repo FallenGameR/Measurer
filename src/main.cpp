@@ -1,71 +1,3 @@
-/***************************************************
-  This is our GFX example for the Adafruit ILI9341 Breakout and Shield
-  ----> http://www.adafruit.com/products/1651
-
-  Check out the links above for our tutorials and wiring diagrams
-  These displays use SPI to communicate, 4 or 5 pins are required to
-  interface (RST is optional)
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  MIT license, all text above must be included in any redistribution
- ****************************************************/
-
-/*
-
-This program provides cartesian type graph function
-
-It requires and Arduino Mega (or UNO) and an Adafruit 3.5" TFT 320x480 + Touchscreen Breakout Board
-https://learn.adafruit.com/adafruit-3-5-color-320x480-tft-touchscreen-breakout/overview
-
-Adafruit libraries
-https://github.com/adafruit/Adafruit_HX8357_Library/archive/master.zip
-https://github.com/adafruit/Adafruit-GFX-Library/archive/master.zip
-
-optional touch screen libraries
-https://github.com/adafruit/Touch-Screen-Library/archive/master.zip
-
-Revisions
-rev     date        author      description
-1       12-24-2015  kasprzak    initial creation
-
-
-This pin setting will also operate the SD card
-
-Pin settings
-
-  Arduino   device
-  5V        Vin
-  GND       GND
-  A0
-  A1
-  A2         Y+ (for touch screen use)
-  A3         X- (for touch screen use)
-  A4
-  A5
-  1
-  2
-  3
-  4         CCS (42 for mega)
-  5
-  6
-  7         Y- (44 for mega)
-  8         X+ (46 for mega)
-  9         DC (48 on mega * change define)
-  10        CS (53 for mega * change define)
-  11        MOSI (51 for mega)
-  12        MISO  (50 for mega)
-  13        CLK (SCK) (52 for mega)
-  44        Y- (for touch screen only)
-  46        X+ (for touch screen only)
-  48        DC
-  SDA
-  SLC
-
-*/
-
 #include <SimpleDHT.h>
 #include "SPI.h"
 #include "Adafruit_GFX.h"
@@ -81,23 +13,10 @@ Pin settings
 
 #define ADJ_PIN A5
 
-// for DHT11,
-//      VCC: 5V or 3V
-//      GND: GND
-//      DATA: 2
 int pinDHT11 = 6;
 
 SimpleDHT11 dht11;
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC, TFT_MOSI, TFT_CLK, TFT_RST, TFT_MISO);
-
-// These are 'flexible' lines that can be changed
-
-/*
-#define TFT_CS 53
-#define TFT_DC 48
-#define TFT_RST 8 // RST can be set to -1 if you tie it to Arduino's reset
-#define SD_CCS 42
-*/
 
 #define LTBLUE 0xB6DF
 #define LTTEAL 0xBF5F
@@ -280,6 +199,8 @@ void Graph(Adafruit_ILI9341 &d, double x, double y, double gx, double gy, double
 
 void drawTermistorReading()
 {
+  boolean display7 = true;
+
   for (double x = 0; x <= 60; x += 1)
   {
     int vo = analogRead(ADJ_PIN);
