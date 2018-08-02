@@ -58,9 +58,9 @@ void drawTermistorReading()
             0,                                             // xlo = lower bound of x axis
             60,                                            // xhi = upper bound of x asis
             10,                                            // xinc = division of x axis (distance not count)
-            -5,                                            // ylo = lower bound of y axis
+            20,                                            // ylo = lower bound of y axis
             30,                                            // yhi = upper bound of y asis
-            5,                                             // yinc = division of y axis (distance not count)
+            1,                                             // yinc = division of y axis (distance not count)
             "Temparature",                                 // title = title of graph
             "seconds",                                     // xlabel = x asis label
             "celcius",                                     // ylabel = y asis label

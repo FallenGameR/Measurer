@@ -12,6 +12,13 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_TFT_CS, PIN_TFT_DC, PIN_TFT_MOSI, PI
 boolean display7 = true;
 double ox, oy;
 
+#define LEGEND_PADDING_Y_HORIZONTAL -20
+#define LEGEND_PADDING_Y_VERTICAL -5
+#define LEGEND_PADDING_X_HORIZONTAL -12
+#define LEGEND_PADDING_X_VERTICAL 5
+#define TITLE_PADDING_HORIZONTAL LEGEND_PADDING_Y_HORIZONTAL
+#define TITLE_PADDING_VERTICAL -30
+
 /*
 
   function to draw a cartesian coordinate system and plot whatever data you want
@@ -42,78 +49,56 @@ void Graph(
     unsigned int bcolor, // background color
     boolean &redraw)     // flag to redraw graph on fist call only, when true draws axes and sets the flag to false
 {
-    // initialize old x and old y in order to draw the first point of the graph
-    // but save the transformed value
-    // note my transform funcition is the same as the map function, except the map uses long and we need doubles
-    //static double ox = (x - xlo) * ( w) / (xhi - xlo) + gx;
-    //static double oy = (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
     double i;
     double temp;
 
     if (redraw == true)
     {
+        // Don't redraw axes on the next run
         redraw = false;
+
+        // Initialize old x and old y in order to draw the first point of the graph
+        // This transform funcition is the same as the map function, except the map uses long and we use doubles
         ox = (x - xlo) * (w) / (xhi - xlo) + gx;
         oy = (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
-        // draw y scale
+
+        // Draw y scale
         for (i = ylo; i <= yhi; i += yinc)
         {
-            // compute the transform
             temp = (i - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
-
-            if (i == 0)
-            {
-                d.drawLine(gx, temp, gx + w, temp, acolor);
-            }
-            else
-            {
-                d.drawLine(gx, temp, gx + w, temp, gcolor);
-            }
-
+            d.drawLine(gx, temp, gx + w, temp, (i == 0) ? acolor : gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
-            d.setCursor(gx - 40, temp);
-            // precision is default Arduino--this could really use some format control
+            d.setCursor(gx + LEGEND_PADDING_Y_HORIZONTAL, temp + LEGEND_PADDING_Y_VERTICAL);
             d.println((int)i);
         }
-        // draw x scale
+
+        // Draw x scale
         for (i = xlo; i <= xhi; i += xinc)
         {
-
-            // compute the transform
-
             temp = (i - xlo) * (w) / (xhi - xlo) + gx;
-            if (i == 0)
-            {
-                d.drawLine(temp, gy, temp, gy - h, acolor);
-            }
-            else
-            {
-                d.drawLine(temp, gy, temp, gy - h, gcolor);
-            }
-
+            d.drawLine(temp, gy, temp, gy - h, (i == 0) ? acolor : gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
-            d.setCursor(temp, gy + 10);
-            // precision is default Arduino--this could really use some format control
+            d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + LEGEND_PADDING_X_VERTICAL);
             d.println((int)i);
         }
 
-        //now draw the labels
+        // Draw legend
         d.setTextSize(2);
         d.setTextColor(tcolor, bcolor);
-        d.setCursor(gx, gy - h - 30);
-        d.println(title);
+        d.setCursor(gx + TITLE_PADDING_HORIZONTAL, gy - h + TITLE_PADDING_VERTICAL);
+        d.print(title);
 
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
         d.setCursor(gx, gy + 20);
-        d.println(xlabel);
+        d.print(xlabel);
 
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
         d.setCursor(gx - 30, gy - h - 10);
-        d.println(ylabel);
+        d.print(ylabel);
     }
 
     //graph drawn now plot the data
