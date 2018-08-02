@@ -29,8 +29,8 @@ void Graph(
     Adafruit_ILI9341 &d, // display object
     double x,            // x data point
     double y,            // y data point
-    double gx,           // x graph location (lower left corner)
-    double gy,           // y graph location (lower left corner)
+    double gx,           // x graph location (upper left corner)
+    double gy,           // y graph location (upper left corner)
     double w,            // width of graph
     double h,            // height of graph
     double xlo,          // lower bound of x axis
@@ -60,12 +60,12 @@ void Graph(
         // Initialize old x and old y in order to draw the first point of the graph
         // This transform funcition is the same as the map function, except the map uses long and we use doubles
         ox = (x - xlo) * (w) / (xhi - xlo) + gx;
-        oy = (y - ylo) * (-h) / (yhi - ylo) + gy;
+        oy = (y - ylo) * (-h) / (yhi - ylo) + gy + h;
 
         // Draw y scale
         for (i = ylo; i <= yhi; i += yinc)
         {
-            temp = (i - ylo) * (-h) / (yhi - ylo) + gy;
+            temp = (i - ylo) * (-h) / (yhi - ylo) + gy + h;
             d.drawLine(gx, temp, gx + w, temp, (i == 0) ? acolor : gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
@@ -77,33 +77,33 @@ void Graph(
         for (i = xlo; i <= xhi; i += xinc)
         {
             temp = (i - xlo) * (w) / (xhi - xlo) + gx;
-            d.drawLine(temp, gy, temp, gy - h, (i == 0) ? acolor : gcolor);
+            d.drawLine(temp, gy + h, temp, gy, (i == 0) ? acolor : gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
-            d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + LEGEND_PADDING_X_VERTICAL);
+            d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + h + LEGEND_PADDING_X_VERTICAL);
             d.println((int)i);
         }
 
         // Draw legend
         d.setTextSize(2);
         d.setTextColor(tcolor, bcolor);
-        d.setCursor(gx + TITLE_PADDING_HORIZONTAL, gy - h + TITLE_PADDING_VERTICAL);
+        d.setCursor(gx + TITLE_PADDING_HORIZONTAL, gy + TITLE_PADDING_VERTICAL);
         d.print(title);
 
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
-        d.setCursor(gx, gy + 20);
+        d.setCursor(gx, gy + h + 20);
         d.print(xlabel);
 
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
-        d.setCursor(gx - 30, gy - h - 10);
+        d.setCursor(gx - 30, gy - 10);
         d.print(ylabel);
     }
 
     // Plot the data in as a bold line
     x = (x - xlo) * (w) / (xhi - xlo) + gx;
-    y = (y - ylo) * (-h) / (yhi - ylo) + gy;
+    y = (y - ylo) * (-h) / (yhi - ylo) + gy + h;
     d.drawLine(ox, oy, x, y, pcolor);
     d.drawLine(ox, oy + 1, x, y + 1, pcolor);
     d.drawLine(ox, oy - 1, x, y - 1, pcolor);

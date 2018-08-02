@@ -51,8 +51,8 @@ void drawTermistorReading()
             tft,                                           // &d name of your display object
             x,                                             // x = x data point
             steinhart,                                     // y = y datapont
-            X_AXES_PADDING,                                // gx = x graph location (lower left) - needed for y axes numbers
-            tft.height() - Y_AXES_PADDING,                 // gy = y graph location (lower left) - needed for x axes numbers and title
+            X_AXES_PADDING,                                // gx = x graph location (upper left) - needed for y axes numbers
+            Y_AXES_PADDING,                                // gy = y graph location (upper left) - needed for x axes numbers and title
             tft.width() - X_AXES_PADDING - 1,              // w = width of graph                 - needed for y and last x axes numbers
             tft.height() - Y_AXES_PADDING - TITLE_PADDING, // h = height of graph                - needed for title
             0,                                             // xlo = lower bound of x axis
