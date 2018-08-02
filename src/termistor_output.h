@@ -65,7 +65,7 @@ void drawTermistorReading()
             "seconds",                                     // xlabel = x asis label
             "celcius",                                     // ylabel = y asis label
             DKBLUE,                                        // gcolor = graph line colors
-            RED,                                           // acolor = axi ine colors
+            RED,                                           // acolor = axes
             GREEN,                                         // pcolor = color of your plotted data
             WHITE,                                         // tcolor = text color
             BLACK,                                         // bcolor = background color
