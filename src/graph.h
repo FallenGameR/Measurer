@@ -60,12 +60,12 @@ void Graph(
         // Initialize old x and old y in order to draw the first point of the graph
         // This transform funcition is the same as the map function, except the map uses long and we use doubles
         ox = (x - xlo) * (w) / (xhi - xlo) + gx;
-        oy = (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
+        oy = (y - ylo) * (-h) / (yhi - ylo) + gy;
 
         // Draw y scale
         for (i = ylo; i <= yhi; i += yinc)
         {
-            temp = (i - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
+            temp = (i - ylo) * (-h) / (yhi - ylo) + gy;
             d.drawLine(gx, temp, gx + w, temp, (i == 0) ? acolor : gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
@@ -101,11 +101,9 @@ void Graph(
         d.print(ylabel);
     }
 
-    //graph drawn now plot the data
-    // the entire plotting code are these few lines...
-    // recall that ox and oy are initialized as static above
+    // Plot the data in as a bold line
     x = (x - xlo) * (w) / (xhi - xlo) + gx;
-    y = (y - ylo) * (gy - h - gy) / (yhi - ylo) + gy;
+    y = (y - ylo) * (-h) / (yhi - ylo) + gy;
     d.drawLine(ox, oy, x, y, pcolor);
     d.drawLine(ox, oy + 1, x, y + 1, pcolor);
     d.drawLine(ox, oy - 1, x, y - 1, pcolor);
