@@ -18,6 +18,10 @@ double ox, oy;
 #define LEGEND_PADDING_X_VERTICAL 5
 #define TITLE_PADDING_HORIZONTAL LEGEND_PADDING_Y_HORIZONTAL
 #define TITLE_PADDING_VERTICAL -30
+#define AXES_NAME_PADDING_Y_HORIZONTAL -30
+#define AXES_NAME_PADDING_Y_VERTICAL -10
+#define AXES_NAME_PADDING_X_HORIZONTAL 0
+#define AXES_NAME_PADDING_X_VERTICAL 20
 
 /*
 
@@ -92,12 +96,12 @@ void Graph(
 
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
-        d.setCursor(gx, gy + h + 20);
+        d.setCursor(gx + AXES_NAME_PADDING_X_HORIZONTAL, gy + h + AXES_NAME_PADDING_X_VERTICAL);
         d.print(xlabel);
 
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
-        d.setCursor(gx - 30, gy - 10);
+        d.setCursor(gx + AXES_NAME_PADDING_Y_HORIZONTAL, gy AXES_NAME_PADDING_Y_VERTICAL);
         d.print(ylabel);
     }
 
