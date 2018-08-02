@@ -3,6 +3,9 @@
 
 #include <Adafruit_ILI9341.h>
 #include "colors.h"
+#include "pins.h"
+
+Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_TFT_CS, PIN_TFT_DC, PIN_TFT_MOSI, PIN_TFT_CLK, PIN_TFT_RST, PIN_TFT_MISO);
 
 // this is the only external variable used by the graph
 // it's a flat to draw the coordinate system only on the first pass
