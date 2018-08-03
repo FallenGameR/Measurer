@@ -98,15 +98,14 @@ void InitializeAxes(
     d.print(xlabel);
 }
 
-double ox;
-double oy;
-
 void Graph(
     Adafruit_ILI9341 &d, // display object
     box &screen,
     box &plot,
-    double x,            // x data point
-    double y,            // y data point
+    double x, // x data point
+    double y, // y data point
+    double &ox,
+    double &oy,
     unsigned int pcolor) // plotted data color
 {
     x = MAP_X(x, plot, screen);

@@ -11,11 +11,11 @@ byte humidity = 0;
 
 void printReadings()
 {
-    tft.setCursor(260, 0);
+    tft.setCursor(260, 40);
     tft.print((int)temperature);
     tft.println(" C");
 
-    tft.setCursor(260, 8 * 2);
+    tft.setCursor(260, 40 + 8 * 2);
     tft.print((int)humidity);
     tft.println(" %");
 }
