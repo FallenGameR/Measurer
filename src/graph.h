@@ -41,11 +41,9 @@ struct box
 
 void InitializeGraph(
     Adafruit_ILI9341 &d, // display object
-    double xlo,          // lower bound of x axis
-    double xhi,          // upper bound of x asis
+    box &screen,
+    box &plot,
     double xinc,         // increments on x axis
-    double ylo,          // lower bound of y axis
-    double yhi,          // upper bound of y asis
     double yinc,         // increments on y axis
     String title,        // title of graph
     String xlabel,       // x axis label
@@ -56,26 +54,6 @@ void InitializeGraph(
     unsigned int bcolor  // background color
 )
 {
-    double gx = 0;         // x graph location (upper left corner)
-    double gy = 0;         // y graph location (upper left corner)
-    double w = d.width();  // width of graph
-    double h = d.height(); // height of graph
-
-    // Screen / tft / image
-    // Plot / graph
-
-    box screen;
-    screen.xlo = gx;
-    screen.ylo = gy;
-    screen.xhi = gx + w - 1;
-    screen.yhi = gy + h - 1;
-
-    box plot;
-    plot.xlo = xlo;
-    plot.ylo = ylo;
-    plot.xhi = xhi;
-    plot.yhi = yhi;
-
     // Draw y scale
     for (double y = plot.ylo + yinc; y <= plot.yhi; y += yinc)
     {
@@ -170,7 +148,19 @@ void Graph(
         oy = MAP_Y(y, ylo, yhi, gy, h);
 
         // Draw grid
-        InitializeGraph(d, xlo, xhi, xinc, ylo, yhi, yinc, title, xlabel, ylabel, gcolor, acolor, tcolor, bcolor);
+        box screen;
+        screen.xlo = 0;
+        screen.ylo = 0;
+        screen.xhi = d.width() - 1;
+        screen.yhi = d.height() - 1;
+
+        box plot;
+        plot.xlo = xlo;
+        plot.ylo = ylo;
+        plot.xhi = xhi;
+        plot.yhi = yhi;
+
+        InitializeGraph(d, screen, plot, xinc, yinc, title, xlabel, ylabel, gcolor, acolor, tcolor, bcolor);
     }
 
     // Plot the data in as a bold line
