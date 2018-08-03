@@ -28,6 +28,14 @@ double ox, oy;
 #define MAP_X(x, xlo, xhi, gx, w) ((x - xlo) * w / (xhi - xlo) + gx)
 #define MAP_Y(y, ylo, yhi, gy, h) ((y - ylo) * -h / (yhi - ylo) + gy + h)
 
+struct box
+{
+    double xlo;
+    double ylo;
+    double xhi;
+    double yhi;
+};
+
 void InitializeGraph(
     Adafruit_ILI9341 &d, // display object
     double xlo,          // lower bound of x axis
@@ -49,6 +57,12 @@ void InitializeGraph(
     double gy = 0;             // y graph location (upper left corner)
     double w = d.width() - 1;  // width of graph
     double h = d.height() - 1; // height of graph
+
+    // Screen / tft / image
+    // Plot / graph
+
+    //box screen = {.xlo = 0, ylo = 0, xhi = d.width() - 1, yhi = d.height() - 1};
+    //box plot = {.xlo = xlo, .ylo = ylo, .xhi = xhi, .yhi = yhi};
 
     // Draw y scale
     for (double i = ylo + yinc; i <= yhi; i += yinc)
@@ -97,8 +111,8 @@ void InitializeFirstDot()
 {
     // Initialize old x and old y in order to draw the first point of the graph
     // This transform funcition is the same as the map function, except the map uses long and we use doubles
-    ox = MAP_X(x, xlo, xhi, gx, w);
-    oy = MAP_Y(y, ylo, yhi, gy, h);
+    //ox = MAP_X(x, xlo, xhi, gx, w);
+    //oy = MAP_Y(y, ylo, yhi, gy, h);
 }
 
 // Split into grid and graph
