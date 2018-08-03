@@ -25,6 +25,84 @@ double ox, oy;
 #define LEGEND_PADDING_X_HORIZONTAL -12
 #define LEGEND_PADDING_X_VERTICAL -8
 
+#define MAP_X(x, xlo, xhi, gx, w) ((x - xlo) * w / (xhi - xlo) + gx)
+#define MAP_Y(y, ylo, yhi, gy, h) ((y - ylo) * -h / (yhi - ylo) + gy + h)
+
+void InitializeGraph(
+    Adafruit_ILI9341 &d, // display object
+    double xlo,          // lower bound of x axis
+    double xhi,          // upper bound of x asis
+    double xinc,         // increments on x axis
+    double ylo,          // lower bound of y axis
+    double yhi,          // upper bound of y asis
+    double yinc,         // increments on y axis
+    String title,        // title of graph
+    String xlabel,       // x axis label
+    String ylabel,       // y axis label
+    unsigned int gcolor, // grid color
+    unsigned int acolor, // axes color
+    unsigned int tcolor, // text color
+    unsigned int bcolor  // background color
+)
+{
+    double gx = 0;             // x graph location (upper left corner)
+    double gy = 0;             // y graph location (upper left corner)
+    double w = d.width() - 1;  // width of graph
+    double h = d.height() - 1; // height of graph
+
+    // Draw y scale
+    for (double i = ylo + yinc; i <= yhi; i += yinc)
+    {
+        double temp = MAP_Y(i, ylo, yhi, gy, h);
+        d.drawLine(gx, temp, gx + w, temp, gcolor);
+        d.setTextSize(1);
+        d.setTextColor(tcolor, bcolor);
+        d.setCursor(gx + LEGEND_PADDING_Y_HORIZONTAL, temp + LEGEND_PADDING_Y_VERTICAL);
+        d.print((int)i);
+    }
+
+    // Draw x scale
+    for (double i = xlo + xinc; i <= xhi; i += xinc)
+    {
+        double temp = MAP_X(i, xlo, xhi, gx, w);
+        d.drawLine(temp, gy, temp, gy + h, gcolor);
+        d.setTextSize(1);
+        d.setTextColor(tcolor, bcolor);
+        d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + h + LEGEND_PADDING_X_VERTICAL);
+        d.print((int)i);
+    }
+
+    // Draw title
+    d.setTextSize(2);
+    d.setTextColor(tcolor, bcolor);
+    d.setCursor(gx + w - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, gy + TITLE_PADDING_VERTICAL);
+    d.print(title);
+
+    // Draw y axes
+    d.drawLine(gx, gy, gx, gy + h, acolor);
+    d.setTextSize(1);
+    d.setTextColor(acolor, bcolor);
+    d.setCursor(gx + AXES_NAME_PADDING_Y_HORIZONTAL, gy + AXES_NAME_PADDING_Y_VERTICAL);
+    d.print(ylabel);
+
+    // Draw x axes
+    d.drawLine(gx, gy + h, gx + w, gy + h, acolor);
+    d.setTextSize(1);
+    d.setTextColor(acolor, bcolor);
+    d.setCursor(gx + w - xlabel.length() * 6 + AXES_NAME_PADDING_X_HORIZONTAL, gy + h + AXES_NAME_PADDING_X_VERTICAL);
+    d.print(xlabel);
+}
+
+void InitializeFirstDot()
+{
+    // Initialize old x and old y in order to draw the first point of the graph
+    // This transform funcition is the same as the map function, except the map uses long and we use doubles
+    ox = MAP_X(x, xlo, xhi, gx, w);
+    oy = MAP_Y(y, ylo, yhi, gy, h);
+}
+
+// Split into grid and graph
+// Previous dots into arguments
 /*
 
   function to draw a cartesian coordinate system and plot whatever data you want
@@ -55,9 +133,6 @@ void Graph(
     unsigned int bcolor, // background color
     boolean &redraw)     // flag to redraw graph on fist call only, when true draws axes and sets the flag to false
 {
-    double i;
-    double temp;
-
     if (redraw == true)
     {
         // Don't redraw axes on the next run
@@ -65,57 +140,16 @@ void Graph(
 
         // Initialize old x and old y in order to draw the first point of the graph
         // This transform funcition is the same as the map function, except the map uses long and we use doubles
-        ox = (x - xlo) * (w) / (xhi - xlo) + gx;
-        oy = (y - ylo) * (-h) / (yhi - ylo) + gy + h;
+        ox = MAP_X(x, xlo, xhi, gx, w);
+        oy = MAP_Y(y, ylo, yhi, gy, h);
 
-        // Draw y scale
-        for (i = ylo + yinc; i <= yhi; i += yinc)
-        {
-            temp = (i - ylo) * (-h) / (yhi - ylo) + gy + h;
-            d.drawLine(gx, temp, gx + w, temp, gcolor);
-            d.setTextSize(1);
-            d.setTextColor(tcolor, bcolor);
-            d.setCursor(gx + LEGEND_PADDING_Y_HORIZONTAL, temp + LEGEND_PADDING_Y_VERTICAL);
-            d.print((int)i);
-        }
-
-        // Draw x scale
-        for (i = xlo + xinc; i <= xhi; i += xinc)
-        {
-            temp = (i - xlo) * (w) / (xhi - xlo) + gx;
-            d.drawLine(temp, gy, temp, gy + h, gcolor);
-            d.setTextSize(1);
-            d.setTextColor(tcolor, bcolor);
-            d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + h + LEGEND_PADDING_X_VERTICAL);
-            d.print((int)i);
-        }
-
-        // Draw title
-        d.setTextSize(2);
-        d.setTextColor(tcolor, bcolor);
-        d.setCursor(gx + w - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, gy + TITLE_PADDING_VERTICAL);
-        d.print(title);
-
-        // Draw y axes
-        temp = gx;
-        d.drawLine(temp, gy, temp, gy + h, acolor);
-        d.setTextSize(1);
-        d.setTextColor(acolor, bcolor);
-        d.setCursor(gx + AXES_NAME_PADDING_Y_HORIZONTAL, gy + AXES_NAME_PADDING_Y_VERTICAL);
-        d.print(ylabel);
-
-        // Draw x axes
-        temp = gy + h;
-        d.drawLine(gx, temp, gx + w, temp, acolor);
-        d.setTextSize(1);
-        d.setTextColor(acolor, bcolor);
-        d.setCursor(gx + w - xlabel.length() * 6 + AXES_NAME_PADDING_X_HORIZONTAL, gy + h + AXES_NAME_PADDING_X_VERTICAL);
-        d.print(xlabel);
+        // Draw grid
+        InitializeGraph(d, xlo, xhi, xinc, ylo, yhi, yinc, title, xlabel, ylabel, gcolor, acolor, tcolor, bcolor);
     }
 
     // Plot the data in as a bold line
-    x = (x - xlo) * (w) / (xhi - xlo) + gx;
-    y = (y - ylo) * (-h) / (yhi - ylo) + gy + h;
+    x = MAP_X(x, xlo, xhi, gx, w);
+    y = MAP_Y(y, ylo, yhi, gy, h);
     d.drawLine(ox, oy, x, y, pcolor);
     d.drawLine(ox, oy + 1, x, y + 1, pcolor);
     d.drawLine(ox, oy - 1, x, y - 1, pcolor);
