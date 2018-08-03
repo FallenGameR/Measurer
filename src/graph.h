@@ -12,16 +12,18 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_TFT_CS, PIN_TFT_DC, PIN_TFT_MOSI, PI
 boolean display7 = true;
 double ox, oy;
 
-#define LEGEND_PADDING_Y_HORIZONTAL -20
-#define LEGEND_PADDING_Y_VERTICAL -5
-#define LEGEND_PADDING_X_HORIZONTAL -12
-#define LEGEND_PADDING_X_VERTICAL 5
 #define TITLE_PADDING_HORIZONTAL 0
 #define TITLE_PADDING_VERTICAL 2
-#define AXES_NAME_PADDING_Y_HORIZONTAL 3
-#define AXES_NAME_PADDING_Y_VERTICAL -4
+
+#define AXES_NAME_PADDING_Y_HORIZONTAL 2
+#define AXES_NAME_PADDING_Y_VERTICAL 11
 #define AXES_NAME_PADDING_X_HORIZONTAL 0
-#define AXES_NAME_PADDING_X_VERTICAL -4
+#define AXES_NAME_PADDING_X_VERTICAL -21
+
+#define LEGEND_PADDING_Y_HORIZONTAL 2
+#define LEGEND_PADDING_Y_VERTICAL 2
+#define LEGEND_PADDING_X_HORIZONTAL -12
+#define LEGEND_PADDING_X_VERTICAL -8
 
 /*
 
@@ -67,10 +69,10 @@ void Graph(
         oy = (y - ylo) * (-h) / (yhi - ylo) + gy + h;
 
         // Draw y scale
-        for (i = ylo; i <= yhi; i += yinc)
+        for (i = ylo + yinc; i <= yhi; i += yinc)
         {
             temp = (i - ylo) * (-h) / (yhi - ylo) + gy + h;
-            d.drawLine(gx, temp, gx + w, temp, (i == ylo) ? acolor : gcolor);
+            d.drawLine(gx, temp, gx + w, temp, gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
             d.setCursor(gx + LEGEND_PADDING_Y_HORIZONTAL, temp + LEGEND_PADDING_Y_VERTICAL);
@@ -78,10 +80,10 @@ void Graph(
         }
 
         // Draw x scale
-        for (i = xlo; i <= xhi; i += xinc)
+        for (i = xlo + xinc; i <= xhi; i += xinc)
         {
             temp = (i - xlo) * (w) / (xhi - xlo) + gx;
-            d.drawLine(temp, gy, temp, gy + h, (i == xlo) ? acolor : gcolor);
+            d.drawLine(temp, gy, temp, gy + h, gcolor);
             d.setTextSize(1);
             d.setTextColor(tcolor, bcolor);
             d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + h + LEGEND_PADDING_X_VERTICAL);
@@ -94,13 +96,17 @@ void Graph(
         d.setCursor(gx + w - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, gy + TITLE_PADDING_VERTICAL);
         d.print(title);
 
-        // Draw y axes name
+        // Draw y axes
+        temp = gx;
+        d.drawLine(temp, gy, temp, gy + h, acolor);
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
         d.setCursor(gx + AXES_NAME_PADDING_Y_HORIZONTAL, gy + AXES_NAME_PADDING_Y_VERTICAL);
         d.print(ylabel);
 
-        // Draw x axes name
+        // Draw x axes
+        temp = gy + h;
+        d.drawLine(gx, temp, gx + w, temp, acolor);
         d.setTextSize(1);
         d.setTextColor(acolor, bcolor);
         d.setCursor(gx + w - xlabel.length() * 6 + AXES_NAME_PADDING_X_HORIZONTAL, gy + h + AXES_NAME_PADDING_X_VERTICAL);

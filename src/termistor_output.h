@@ -4,12 +4,6 @@
 #include "dht_output.h"
 #include "graph.h"
 
-// Device objects
-
-#define X_AXES_PADDING 50
-#define Y_AXES_PADDING 30
-#define TITLE_PADDING 30
-
 // the value of the 'other' resistor
 #define SERIESRESISTOR 1e4
 
@@ -48,33 +42,31 @@ void drawTermistorReading()
         }
 
         Graph(
-            tft,                                           // &d name of your display object
-            x,                                             // x = x data point
-            steinhart,                                     // y = y datapont
-            X_AXES_PADDING,                                // gx = x graph location (upper left) - needed for y axes numbers
-            Y_AXES_PADDING,                                // gy = y graph location (upper left) - needed for x axes numbers and title
-            tft.width() - X_AXES_PADDING - 1,              // w = width of graph                 - needed for y and last x axes numbers
-            tft.height() - Y_AXES_PADDING - TITLE_PADDING, // h = height of graph                - needed for title
-            0,                                             // xlo = lower bound of x axis
-            60,                                            // xhi = upper bound of x asis
-            10,                                            // xinc = division of x axis (distance not count)
-            20,                                            // ylo = lower bound of y axis
-            30,                                            // yhi = upper bound of y asis
-            1,                                             // yinc = division of y axis (distance not count)
-            "Temparature",                                 // title = title of graph
-            "seconds",                                     // xlabel = x asis label
-            "celcius",                                     // ylabel = y asis label
-            DKBLUE,                                        // gcolor = graph line colors
-            RED,                                           // acolor = axes
-            GREEN,                                         // pcolor = color of your plotted data
-            WHITE,                                         // tcolor = text color
-            BLACK,                                         // bcolor = background color
-            display7);                                     // &redraw = flag to redraw graph on fist call only
+            tft,              // &d name of your display object
+            x,                // x = x data point
+            steinhart,        // y = y datapont
+            0,                // gx = x graph location (upper left) - needed for y axes numbers
+            0,                // gy = y graph location (upper left) - needed for x axes numbers and title
+            tft.width() - 1,  // w = width of graph                 - needed for y and last x axes numbers
+            tft.height() - 1, // h = height of graph                - needed for title
+            0,                // xlo = lower bound of x axis
+            60,               // xhi = upper bound of x asis
+            10,               // xinc = division of x axis (distance not count)
+            20,               // ylo = lower bound of y axis
+            30,               // yhi = upper bound of y asis
+            1,                // yinc = division of y axis (distance not count)
+            "Temparature",    // title = title of graph
+            "seconds",        // xlabel = x asis label
+            "celcius",        // ylabel = y asis label
+            DKBLUE,           // gcolor = graph line colors
+            RED,              // acolor = axes
+            GREEN,            // pcolor = color of your plotted data
+            WHITE,            // tcolor = text color
+            BLACK,            // bcolor = background color
+            display7);        // &redraw = flag to redraw graph on fist call only
 
         delay(250);
     }
-
-    tft.fillScreen(BLACK);
 }
 
 #endif // TERMISTOR_OUTPUT_H

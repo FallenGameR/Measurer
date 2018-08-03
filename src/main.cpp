@@ -15,11 +15,11 @@ void setup()
   Serial.println(tft.width());
   Serial.print("Height: ");
   Serial.println(tft.height());
-
-  tft.fillScreen(BLACK);
 }
 
 void loop(void)
 {
+  tft.fillScreen(BLACK);
   drawTermistorReading();
+  delay(60000);
 }
