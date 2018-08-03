@@ -53,19 +53,19 @@ void InitializeGraph(
     unsigned int bcolor  // background color
 )
 {
-    double gx = 0;             // x graph location (upper left corner)
-    double gy = 0;             // y graph location (upper left corner)
-    double w = d.width() - 1;  // width of graph
-    double h = d.height() - 1; // height of graph
+    double gx = 0;         // x graph location (upper left corner)
+    double gy = 0;         // y graph location (upper left corner)
+    double w = d.width();  // width of graph
+    double h = d.height(); // height of graph
 
     // Screen / tft / image
     // Plot / graph
 
     box screen;
-    screen.xlo = 0;
-    screen.ylo = 0;
-    screen.xhi = d.width() - 1;
-    screen.yhi = d.height() - 1;
+    screen.xlo = gx;
+    screen.ylo = gy;
+    screen.xhi = gx + w - 1;
+    screen.yhi = gy + h - 1;
 
     box plot;
     plot.xlo = xlo;
@@ -76,8 +76,8 @@ void InitializeGraph(
     // Draw y scale
     for (double y = plot.ylo + yinc; y <= plot.yhi; y += yinc)
     {
-        double temp = MAP_Y(y, plot.ylo, plot.yhi, screen.ylo, h);
-        d.drawLine(screen.xlo, temp, gx + w, temp, gcolor);
+        double temp = MAP_Y(y, plot.ylo, plot.yhi, screen.ylo, (screen.yhi - screen.ylo));
+        d.drawLine(screen.xlo, temp, screen.xhi, temp, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
         d.setCursor(screen.xlo + LEGEND_PADDING_Y_HORIZONTAL, temp + LEGEND_PADDING_Y_VERTICAL);
@@ -87,32 +87,32 @@ void InitializeGraph(
     // Draw x scale
     for (double x = plot.xlo + xinc; x <= plot.xhi; x += xinc)
     {
-        double temp = MAP_X(x, plot.xlo, plot.xhi, screen.xlo, w);
-        d.drawLine(temp, screen.ylo, temp, gy + h, gcolor);
+        double temp = MAP_X(x, plot.xlo, plot.xhi, screen.xlo, (screen.xhi - screen.xlo));
+        d.drawLine(temp, screen.ylo, temp, screen.yhi, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
-        d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + h + LEGEND_PADDING_X_VERTICAL);
+        d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, screen.yhi + LEGEND_PADDING_X_VERTICAL);
         d.print((int)x);
     }
 
     // Draw title
     d.setTextSize(2);
     d.setTextColor(tcolor, bcolor);
-    d.setCursor(gx + w - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, screen.ylo + TITLE_PADDING_VERTICAL);
+    d.setCursor(screen.xhi - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, screen.ylo + TITLE_PADDING_VERTICAL);
     d.print(title);
 
     // Draw y axes
-    d.drawLine(screen.xlo, screen.ylo, screen.xlo, gy + h, acolor);
+    d.drawLine(screen.xlo, screen.ylo, screen.xlo, screen.yhi, acolor);
     d.setTextSize(1);
     d.setTextColor(acolor, bcolor);
     d.setCursor(screen.xlo + AXES_NAME_PADDING_Y_HORIZONTAL, screen.ylo + AXES_NAME_PADDING_Y_VERTICAL);
     d.print(ylabel);
 
     // Draw x axes
-    d.drawLine(screen.xlo, gy + h, gx + w, gy + h, acolor);
+    d.drawLine(screen.xlo, screen.yhi, screen.xhi, screen.yhi, acolor);
     d.setTextSize(1);
     d.setTextColor(acolor, bcolor);
-    d.setCursor(gx + w - xlabel.length() * 6 + AXES_NAME_PADDING_X_HORIZONTAL, gy + h + AXES_NAME_PADDING_X_VERTICAL);
+    d.setCursor(screen.xhi - xlabel.length() * 6 + AXES_NAME_PADDING_X_HORIZONTAL, screen.yhi + AXES_NAME_PADDING_X_VERTICAL);
     d.print(xlabel);
 }
 
