@@ -74,9 +74,9 @@ void InitializeGraph(
     plot.yhi = yhi;
 
     // Draw y scale
-    for (double i = ylo + yinc; i <= yhi; i += yinc)
+    for (double i = plot.ylo + yinc; i <= plot.yhi; i += yinc)
     {
-        double temp = MAP_Y(i, ylo, yhi, gy, h);
+        double temp = MAP_Y(i, plot.ylo, plot.yhi, gy, h);
         d.drawLine(gx, temp, gx + w, temp, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
@@ -85,9 +85,9 @@ void InitializeGraph(
     }
 
     // Draw x scale
-    for (double i = xlo + xinc; i <= xhi; i += xinc)
+    for (double i = plot.xlo + xinc; i <= plot.xhi; i += xinc)
     {
-        double temp = MAP_X(i, xlo, xhi, gx, w);
+        double temp = MAP_X(i, plot.xlo, plot.xhi, gx, w);
         d.drawLine(temp, gy, temp, gy + h, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
