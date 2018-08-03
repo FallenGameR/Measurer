@@ -76,7 +76,7 @@ void InitializeGraph(
     // Draw y scale
     for (double y = plot.ylo + yinc; y <= plot.yhi; y += yinc)
     {
-        double temp = MAP_Y(y, plot.ylo, plot.yhi, gy, h);
+        double temp = MAP_Y(y, plot.ylo, plot.yhi, screen.ylo, h);
         d.drawLine(screen.xlo, temp, gx + w, temp, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
@@ -88,7 +88,7 @@ void InitializeGraph(
     for (double x = plot.xlo + xinc; x <= plot.xhi; x += xinc)
     {
         double temp = MAP_X(x, plot.xlo, plot.xhi, screen.xlo, w);
-        d.drawLine(temp, gy, temp, gy + h, gcolor);
+        d.drawLine(temp, screen.ylo, temp, gy + h, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
         d.setCursor(temp + LEGEND_PADDING_X_HORIZONTAL, gy + h + LEGEND_PADDING_X_VERTICAL);
@@ -98,14 +98,14 @@ void InitializeGraph(
     // Draw title
     d.setTextSize(2);
     d.setTextColor(tcolor, bcolor);
-    d.setCursor(gx + w - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, gy + TITLE_PADDING_VERTICAL);
+    d.setCursor(gx + w - title.length() * 6 * 2 + TITLE_PADDING_HORIZONTAL, screen.ylo + TITLE_PADDING_VERTICAL);
     d.print(title);
 
     // Draw y axes
-    d.drawLine(screen.xlo, gy, screen.xlo, gy + h, acolor);
+    d.drawLine(screen.xlo, screen.ylo, screen.xlo, gy + h, acolor);
     d.setTextSize(1);
     d.setTextColor(acolor, bcolor);
-    d.setCursor(screen.xlo + AXES_NAME_PADDING_Y_HORIZONTAL, gy + AXES_NAME_PADDING_Y_VERTICAL);
+    d.setCursor(screen.xlo + AXES_NAME_PADDING_Y_HORIZONTAL, screen.ylo + AXES_NAME_PADDING_Y_VERTICAL);
     d.print(ylabel);
 
     // Draw x axes
