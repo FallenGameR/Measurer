@@ -117,15 +117,9 @@ void Graph(
     Adafruit_ILI9341 &d, // display object
     double x,            // x data point
     double y,            // y data point
-    double gx,           // x graph location (upper left corner)
-    double gy,           // y graph location (upper left corner)
-    double w,            // width of graph
-    double h,            // height of graph
-    double xlo,          // lower bound of x axis
-    double xhi,          // upper bound of x asis
+    box &screen,
+    box &plot,
     double xinc,         // increments on x axis
-    double ylo,          // lower bound of y axis
-    double yhi,          // upper bound of y asis
     double yinc,         // increments on y axis
     String title,        // title of graph
     String xlabel,       // x axis label
@@ -144,28 +138,16 @@ void Graph(
 
         // Initialize old x and old y in order to draw the first point of the graph
         // This transform funcition is the same as the map function, except the map uses long and we use doubles
-        ox = MAP_X(x, xlo, xhi, gx, w);
-        oy = MAP_Y(y, ylo, yhi, gy, h);
+        ox = MAP_XB(x, plot, screen);
+        oy = MAP_YB(y, plot, screen);
 
         // Draw grid
-        box screen;
-        screen.xlo = 0;
-        screen.ylo = 0;
-        screen.xhi = d.width() - 1;
-        screen.yhi = d.height() - 1;
-
-        box plot;
-        plot.xlo = xlo;
-        plot.ylo = ylo;
-        plot.xhi = xhi;
-        plot.yhi = yhi;
-
         InitializeGraph(d, screen, plot, xinc, yinc, title, xlabel, ylabel, gcolor, acolor, tcolor, bcolor);
     }
 
     // Plot the data in as a bold line
-    x = MAP_X(x, xlo, xhi, gx, w);
-    y = MAP_Y(y, ylo, yhi, gy, h);
+    x = MAP_XB(x, plot, screen);
+    y = MAP_YB(y, plot, screen);
     d.drawLine(ox, oy, x, y, pcolor);
     d.drawLine(ox, oy + 1, x, y + 1, pcolor);
     d.drawLine(ox, oy - 1, x, y - 1, pcolor);

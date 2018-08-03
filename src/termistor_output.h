@@ -18,29 +18,35 @@ void drawTermistorReading()
             printDhtReadings();
         }
 
+        box screen;
+        screen.xlo = 0;
+        screen.ylo = 0;
+        screen.xhi = tft.width() - 1;
+        screen.yhi = tft.height() - 1;
+
+        box plot;
+        plot.xlo = 0;  // xlo = lower bound of x axis
+        plot.xhi = 60; // xhi = upper bound of x asis
+        plot.ylo = 20; // ylo = lower bound of y axis
+        plot.yhi = 30; // yhi = upper bound of y asis
+
         Graph(
-            tft,              // &d name of your display object
-            x,                // x = x data point
-            t,                // y = y datapont
-            0,                // gx = x graph location (upper left) - needed for y axes numbers
-            0,                // gy = y graph location (upper left) - needed for x axes numbers and title
-            tft.width() - 1,  // w = width of graph                 - needed for y and last x axes numbers
-            tft.height() - 1, // h = height of graph                - needed for title
-            0,                // xlo = lower bound of x axis
-            60,               // xhi = upper bound of x asis
-            10,               // xinc = division of x axis (distance not count)
-            20,               // ylo = lower bound of y axis
-            30,               // yhi = upper bound of y asis
-            1,                // yinc = division of y axis (distance not count)
-            "Temparature",    // title = title of graph
-            "sec",            // xlabel = x asis label
-            "C",              // ylabel = y asis label
-            DKBLUE,           // gcolor = graph line colors
-            RED,              // acolor = axes
-            GREEN,            // pcolor = color of your plotted data
-            WHITE,            // tcolor = text color
-            BLACK,            // bcolor = background color
-            display7);        // &redraw = flag to redraw graph on fist call only
+            tft, // &d name of your display object
+            x,   // x = x data point
+            t,   // y = y datapont
+            screen,
+            plot,
+            10,            // xinc = division of x axis (distance not count)
+            1,             // yinc = division of y axis (distance not count)
+            "Temparature", // title = title of graph
+            "sec",         // xlabel = x asis label
+            "C",           // ylabel = y asis label
+            DKBLUE,        // gcolor = graph line colors
+            RED,           // acolor = axes
+            GREEN,         // pcolor = color of your plotted data
+            WHITE,         // tcolor = text color
+            BLACK,         // bcolor = background color
+            display7);     // &redraw = flag to redraw graph on fist call only
 
         delay(250);
     }
