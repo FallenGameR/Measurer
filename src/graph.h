@@ -61,8 +61,17 @@ void InitializeGraph(
     // Screen / tft / image
     // Plot / graph
 
-    //box screen = {.xlo = 0, ylo = 0, xhi = d.width() - 1, yhi = d.height() - 1};
-    //box plot = {.xlo = xlo, .ylo = ylo, .xhi = xhi, .yhi = yhi};
+    box screen;
+    screen.xlo = 0;
+    screen.ylo = 0;
+    screen.xhi = d.width() - 1;
+    screen.yhi = d.height() - 1;
+
+    box plot;
+    plot.xlo = xlo;
+    plot.ylo = ylo;
+    plot.xhi = xhi;
+    plot.yhi = yhi;
 
     // Draw y scale
     for (double i = ylo + yinc; i <= yhi; i += yinc)
