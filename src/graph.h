@@ -28,6 +28,9 @@ double ox, oy;
 #define MAP_X(x, xlo, xhi, gx, w) ((x - xlo) * w / (xhi - xlo) + gx)
 #define MAP_Y(y, ylo, yhi, gy, h) ((y - ylo) * -h / (yhi - ylo) + gy + h)
 
+#define MAP_XB(x, plot, screen) (screen.xlo + (x - plot.xlo) * (screen.xhi - screen.xlo) / (plot.xhi - plot.xlo))
+#define MAP_YB(y, plot, screen) (screen.yhi - (y - plot.ylo) * (screen.yhi - screen.ylo) / (plot.yhi - plot.ylo))
+
 struct box
 {
     double xlo;
@@ -76,7 +79,7 @@ void InitializeGraph(
     // Draw y scale
     for (double y = plot.ylo + yinc; y <= plot.yhi; y += yinc)
     {
-        double temp = MAP_Y(y, plot.ylo, plot.yhi, screen.ylo, (screen.yhi - screen.ylo));
+        double temp = MAP_YB(y, plot, screen);
         d.drawLine(screen.xlo, temp, screen.xhi, temp, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
@@ -87,7 +90,7 @@ void InitializeGraph(
     // Draw x scale
     for (double x = plot.xlo + xinc; x <= plot.xhi; x += xinc)
     {
-        double temp = MAP_X(x, plot.xlo, plot.xhi, screen.xlo, (screen.xhi - screen.xlo));
+        double temp = MAP_XB(x, plot, screen);
         d.drawLine(temp, screen.ylo, temp, screen.yhi, gcolor);
         d.setTextSize(1);
         d.setTextColor(tcolor, bcolor);
