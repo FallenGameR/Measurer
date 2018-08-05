@@ -12,7 +12,7 @@
 #define PIN_TFT_MISO -1
 
 // Sensor pins
-#define PIN_TERMISTOR A5
+#define PIN_TERMISTOR A0
 #define PIN_DHT11 6
 
 #endif // PINS_H
