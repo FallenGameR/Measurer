@@ -28,25 +28,30 @@ void setup()
 
 void loop()
 {
-  // DATA:    [========  ]  78.3% (used 1603 bytes from 2048 bytes)
-  // PROGRAM: [========= ] 91.7 % (used 29592 bytes from 32256 bytes)
+  // All
+  // DATA:     1603 /  2048 = 78.3%
+  // PROGRAM: 29592 / 32256 = 91.7% (2664 left)
   tft.fillScreen(BLACK);
 
-  // DATA:    [========  ]  77.0% (used 1577 bytes from 2048 bytes)
-  // PROGRAM: [========  ]  80.5% (used 25964 bytes from 32256 bytes)
+  // Graph termistor
+  // DATA:    26
+  // PROGRAM: 3628
   drawTermistorReading();
 
-  // DATA:    [======    ]  60.5% (used 1239 bytes from 2048 bytes)
-  // PROGRAM: [========= ]  87.8% (used 28310 bytes from 32256 bytes)
+  // PM
+  // DATA:    364
+  // PROGRAM: 1282
   PmRead();
 
-  // DATA:    [=======   ]  65.8% (used 1347 bytes from 2048 bytes)
-  // PROGRAM: [=======   ]  71.7% (used 23134 bytes from 32256 bytes)
+  // BME
+  // DATA:    256
+  // PROGRAM: 6458
   BmeRead();
   delay(2000);
 
-  // DATA:    [=======   ]  71.5% (used 1465 bytes from 2048 bytes)
-  // PROGRAM: [========= ]  88.1% (used 28410 bytes from 32256 bytes)
+  // RTC
+  // DATA:    138
+  // PROGRAM: 1182
   RtcRead();
   delay(5000);
 }

@@ -1,17 +1,16 @@
 #ifndef BME_SENSOR_H
 #define BME_SENSOR_H
 
-#include "pins.h"
-
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME680.h>
+#include "pins.h"
 
-#define BME_SCK 13
-#define BME_MISO 12
-#define BME_MOSI 11
-#define BME_CS 10
+#define PIN_BME_SCK 13
+#define PIN_BME_MISO 12
+#define PIN_BME_MOSI 11
+#define PIN_BME_CS 10
 
 // You can also calculate Altitude. However, you can only really do a good accurate job of calculating altitude if
 // you know the hPa pressure at sea level for your location and day! The sensor is quite precise but if you do not
@@ -21,7 +20,7 @@
 // https://www.atmos.washington.edu/~neallog/temp_real_pressure.html
 // We should have 1008 for 33.5 meters elevation
 
-Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
+Adafruit_BME680 bme(PIN_BME_CS, PIN_BME_MOSI, PIN_BME_MISO, PIN_BME_SCK);
 
 void BmeSetup()
 {

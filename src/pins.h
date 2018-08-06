@@ -19,4 +19,10 @@
 #define PIN_PM_SERIAL 6
 #define PIN_PM_UNUSED 3
 
+// BME pins
+#define PIN_BME_SCK 13
+#define PIN_BME_MISO 12
+#define PIN_BME_MOSI 11
+#define PIN_BME_CS 10
+
 #endif // PINS_H
