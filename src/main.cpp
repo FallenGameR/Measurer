@@ -1,6 +1,5 @@
 #include "graph.h"
 #include "pins.h"
-#include "dht_output.h"
 #include "termistor_output.h"
 #include "pm_sensor.h"
 #include "bme_sensor.h"
