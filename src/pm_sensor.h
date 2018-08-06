@@ -4,10 +4,6 @@
 #include <SoftwareSerial.h>
 #include "pins.h"
 
-// For UNO and others without hardware serial, we must use software serial.
-// First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
-SoftwareSerial pm_sensor(PIN_PM_SERIAL, PIN_PM_UNUSED);
-
 struct pms5003data
 {
     uint16_t framelen;
@@ -18,18 +14,12 @@ struct pms5003data
     uint16_t checksum;
 };
 
-struct pms5003data data;
+// For UNO and others without hardware serial, we must use software serial.
+// First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
+SoftwareSerial pm_sensor(PIN_PM_SERIAL, PIN_PM_UNUSED);
+struct pms5003data pm_sensor_data;
 
-void setup()
-{
-    // our debugging output
-    Serial.begin(9600);
-
-    // sensor baud rate is 9600
-    pm_sensor.begin(9600);
-}
-
-boolean readPMSdata(Stream *s)
+boolean ReadPmSensor(Stream *s)
 {
     if (!s->available())
     {
@@ -66,7 +56,7 @@ boolean readPMSdata(Stream *s)
   Serial.println();
   */
 
-    // The data comes in endian'd, this solves it so it works on all platforms
+    // The pm_sensor_data comes in endian'd, this solves it so it works on all platforms
     uint16_t buffer_u16[15];
     for (uint8_t i = 0; i < 15; i++)
     {
@@ -75,13 +65,14 @@ boolean readPMSdata(Stream *s)
     }
 
     // put it into a nice struct :)
-    memcpy((void *)&data, (void *)buffer_u16, 30);
+    memcpy((void *)&pm_sensor_data, (void *)buffer_u16, 30);
 
-    if (sum != data.checksum)
+    if (sum != pm_sensor_data.checksum)
     {
         Serial.println("Checksum failure");
         return false;
     }
+
     // success!
     return true;
 }
