@@ -4,6 +4,14 @@
 #include <SoftwareSerial.h>
 #include "pins.h"
 
+// https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
+// PM10 and more likelly can be ignored. Looks like the sensor just multiplies P2.5 reading to output P10
+
+// http://aqicn.org/sensor/pms5003-7003/
+// This study also show linear correlation between PM10 and PM2.5 reading
+// It also shows likelly functional dependancy of standarf (CF1) and Atmospheric Environment (env) reading
+// Looks like CF1 is normalized data that adheres to some standart, we should be using it for render
+
 struct pms5003data
 {
     uint16_t framelen;
