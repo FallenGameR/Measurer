@@ -110,9 +110,9 @@ void Graph(
 {
     x = MAP_X(x, plot, screen);
     y = MAP_Y(y, plot, screen);
-    d.drawLine(ox, oy, x, y, pcolor);
-    d.drawLine(ox, oy + 1, x, y + 1, pcolor);
     d.drawLine(ox, oy - 1, x, y - 1, pcolor);
+    d.drawLine(ox, oy + 0, x, y + 0, pcolor);
+    d.drawLine(ox, oy + 1, x, y + 1, pcolor);
     ox = x;
     oy = y;
 }

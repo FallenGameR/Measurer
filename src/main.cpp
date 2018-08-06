@@ -26,6 +26,8 @@ void setup()
   RtcSetup();
 }
 
+// PROGMEM optimization notes - https://learn.adafruit.com/memories-of-an-arduino/optimizing-program-memory
+
 void loop()
 {
   // All
