@@ -7,11 +7,6 @@
 #include <Adafruit_BME680.h>
 #include "pins.h"
 
-#define PIN_BME_SCK 13
-#define PIN_BME_MISO 12
-#define PIN_BME_MOSI 11
-#define PIN_BME_CS 10
-
 // You can also calculate Altitude. However, you can only really do a good accurate job of calculating altitude if
 // you know the hPa pressure at sea level for your location and day! The sensor is quite precise but if you do not
 // have the data updated for the current day then it can be difficult to get more accurate than 10 meters.
