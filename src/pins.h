@@ -15,4 +15,8 @@
 #define PIN_TERMISTOR A0
 #define PIN_DHT11 6
 
+// Particle concentration sensor
+#define PIN_PM_SERIAL 6
+#define PIN_PM_UNUSED 3
+
 #endif // PINS_H

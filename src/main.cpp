@@ -3,15 +3,17 @@
 #include "dht_output.h"
 #include "termistor_output.h"
 
+#include "pins.h"
+
 // On Leonardo/Micro or others with hardware serial, use those!
 // uncomment this line:
-// #define pmsSerial Serial1
+// #define pm_sensor Serial1
 
 // For UNO and others without hardware serial, we must use software serial...
 // pin #2 is IN from sensor (TX pin on sensor), leave pin #3 disconnected
 // comment these two lines if using hardware serial
 #include <SoftwareSerial.h>
-SoftwareSerial pmsSerial(6, 3);
+SoftwareSerial pm_sensor(PIN_PM_SERIAL, PIN_PM_UNUSED);
 
 void setup()
 {
@@ -19,7 +21,7 @@ void setup()
   Serial.begin(9600);
 
   // sensor baud rate is 9600
-  pmsSerial.begin(9600);
+  pm_sensor.begin(9600);
 }
 
 struct pms5003data
@@ -33,47 +35,6 @@ struct pms5003data
 };
 
 struct pms5003data data;
-
-boolean readPMSdata(Stream *s);
-
-void loop()
-{
-  if (readPMSdata(&pmsSerial))
-  {
-    // reading data was successful!
-    Serial.println();
-    Serial.println("---------------------------------------");
-    Serial.println("Concentration Units (standard)");
-    Serial.print("PM 1.0: ");
-    Serial.print(data.pm10_standard);
-    Serial.print("\t\tPM 2.5: ");
-    Serial.print(data.pm25_standard);
-    Serial.print("\t\tPM 10: ");
-    Serial.println(data.pm100_standard);
-    Serial.println("---------------------------------------");
-    Serial.println("Concentration Units (environmental)");
-    Serial.print("PM 1.0: ");
-    Serial.print(data.pm10_env);
-    Serial.print("\t\tPM 2.5: ");
-    Serial.print(data.pm25_env);
-    Serial.print("\t\tPM 10: ");
-    Serial.println(data.pm100_env);
-    Serial.println("---------------------------------------");
-    Serial.print("Particles > 0.3um / 0.1L air:");
-    Serial.println(data.particles_03um);
-    Serial.print("Particles > 0.5um / 0.1L air:");
-    Serial.println(data.particles_05um);
-    Serial.print("Particles > 1.0um / 0.1L air:");
-    Serial.println(data.particles_10um);
-    Serial.print("Particles > 2.5um / 0.1L air:");
-    Serial.println(data.particles_25um);
-    Serial.print("Particles > 5.0um / 0.1L air:");
-    Serial.println(data.particles_50um);
-    Serial.print("Particles > 50 um / 0.1L air:");
-    Serial.println(data.particles_100um);
-    Serial.println("---------------------------------------");
-  }
-}
 
 boolean readPMSdata(Stream *s)
 {
@@ -130,6 +91,45 @@ boolean readPMSdata(Stream *s)
   }
   // success!
   return true;
+}
+
+void loop()
+{
+  if (readPMSdata(&pm_sensor))
+  {
+    // reading data was successful!
+    Serial.println();
+    Serial.println("---------------------------------------");
+    Serial.println("Concentration Units (standard)");
+    Serial.print("PM 1.0: ");
+    Serial.print(data.pm10_standard);
+    Serial.print("\t\tPM 2.5: ");
+    Serial.print(data.pm25_standard);
+    Serial.print("\t\tPM 10: ");
+    Serial.println(data.pm100_standard);
+    Serial.println("---------------------------------------");
+    Serial.println("Concentration Units (environmental)");
+    Serial.print("PM 1.0: ");
+    Serial.print(data.pm10_env);
+    Serial.print("\t\tPM 2.5: ");
+    Serial.print(data.pm25_env);
+    Serial.print("\t\tPM 10: ");
+    Serial.println(data.pm100_env);
+    Serial.println("---------------------------------------");
+    Serial.print("Particles > 0.3um / 0.1L air:");
+    Serial.println(data.particles_03um);
+    Serial.print("Particles > 0.5um / 0.1L air:");
+    Serial.println(data.particles_05um);
+    Serial.print("Particles > 1.0um / 0.1L air:");
+    Serial.println(data.particles_10um);
+    Serial.print("Particles > 2.5um / 0.1L air:");
+    Serial.println(data.particles_25um);
+    Serial.print("Particles > 5.0um / 0.1L air:");
+    Serial.println(data.particles_50um);
+    Serial.print("Particles > 50 um / 0.1L air:");
+    Serial.println(data.particles_100um);
+    Serial.println("---------------------------------------");
+  }
 }
 
 /*
