@@ -85,7 +85,7 @@ boolean ReadPmSensor(Stream *s)
     return true;
 }
 
-void RenderPmSensor()
+void PmRead()
 {
     if (!ReadPmSensor(&pm_sensor))
     {

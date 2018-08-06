@@ -19,7 +19,7 @@
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 // https://www.atmos.washington.edu/~neallog/temp_real_pressure.html
-// We have 1008 for 33.5 meters elevation
+// We should have 1008 for 33.5 meters elevation
 
 Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
 
