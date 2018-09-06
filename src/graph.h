@@ -98,23 +98,15 @@ void InitializeAxes(
     d.print(xlabel);
 }
 
-void Graph(
-    Adafruit_ILI9341 &d, // display object
-    box &screen,
-    box &plot,
-    double x, // x data point
-    double y, // y data point
-    double &ox,
-    double &oy,
-    unsigned int pcolor) // plotted data color
+void Graph(Adafruit_ILI9341 &d, box &screen, box &plot, box &line, unsigned int color)
 {
-    x = MAP_X(x, plot, screen);
-    y = MAP_Y(y, plot, screen);
-    d.drawLine(ox, oy - 1, x, y - 1, pcolor);
-    d.drawLine(ox, oy + 0, x, y + 0, pcolor);
-    d.drawLine(ox, oy + 1, x, y + 1, pcolor);
-    ox = x;
-    oy = y;
+    double x = MAP_X(line.xhi, plot, screen);
+    double y = MAP_Y(line.yhi, plot, screen);
+    d.drawLine(line.xlo, line.ylo - 1, x, y - 1, color);
+    d.drawLine(line.xlo, line.ylo + 0, x, y + 0, color);
+    d.drawLine(line.xlo, line.ylo + 1, x, y + 1, color);
+    line.xlo = x;
+    line.ylo = y;
 }
 
 #endif // GRAPH_H
