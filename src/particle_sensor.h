@@ -1,5 +1,5 @@
-#ifndef PM_SENSOR_H
-#define PM_SENSOR_H
+#ifndef PARTICLE_SENSOR_H
+#define PARTICLE_SENSOR_H
 
 #include <SoftwareSerial.h>
 #include "pins.h"
@@ -126,4 +126,4 @@ void PmRead()
     Serial.println("---------------------------------------");
 }
 
-#endif // PM_SENSOR_H
+#endif // PARTICLE_SENSOR_H

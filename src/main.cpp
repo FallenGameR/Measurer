@@ -1,7 +1,7 @@
 #include "graph.h"
 #include "pins.h"
 #include "termistor.h"
-#include "pm_sensor.h"
+#include "particle_sensor.h"
 #include "bme_sensor.h"
 #include "rtc.h"
 
