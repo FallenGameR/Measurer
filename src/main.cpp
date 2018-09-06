@@ -1,6 +1,6 @@
 #include "graph.h"
 #include "pins.h"
-#include "termistor_output.h"
+#include "termistor.h"
 #include "pm_sensor.h"
 #include "bme_sensor.h"
 #include "rtc.h"
@@ -38,7 +38,7 @@ void loop()
   // Graph termistor
   // DATA:    26
   // PROGRAM: 3628
-  drawTermistorReading();
+  DrawTemperatureTermistor();
 
   // PM
   // DATA:    364
