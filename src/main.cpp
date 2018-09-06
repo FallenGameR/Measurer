@@ -38,7 +38,7 @@ void loop()
   // Graph termistor
   // DATA:    26
   // PROGRAM: 3628
-  DrawTemperatureTermistor();
+  //DrawTemperatureTermistor();
 
   // PM
   // DATA:    364
@@ -48,12 +48,12 @@ void loop()
   // BME
   // DATA:    256
   // PROGRAM: 6458
-  BmeRead();
-  delay(2000);
+  //BmeRead();
+  //delay(2000);
 
   // RTC
   // DATA:    138
   // PROGRAM: 1182
-  RtcRead();
-  delay(5000);
+  //RtcRead();
+  //delay(5000);
 }

@@ -31,6 +31,7 @@ boolean ReadPmSensor(Stream *s)
 {
     if (!s->available())
     {
+        Serial.println("PM error: no data available");
         return false;
     }
 
@@ -38,12 +39,14 @@ boolean ReadPmSensor(Stream *s)
     if (s->peek() != 0x42)
     {
         s->read();
+        Serial.println("PM error: waiting for the start byte");
         return false;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
+        Serial.println("PM error: not enough data to deserialize");
         return false;
     }
 
@@ -77,7 +80,7 @@ boolean ReadPmSensor(Stream *s)
 
     if (sum != pm_sensor_data.checksum)
     {
-        Serial.println("Checksum failure");
+        Serial.println("PM error: checksum failure");
         return false;
     }
 
@@ -96,34 +99,24 @@ void PmRead()
     Serial.println();
     Serial.println("---------------------------------------");
     Serial.println("Concentration Units (standard)");
-    Serial.print("PM 1.0: ");
-    Serial.print(pm_sensor_data.pm10_standard);
-    Serial.print("\t\tPM 2.5: ");
-    Serial.print(pm_sensor_data.pm25_standard);
-    Serial.print("\t\tPM 10: ");
+    Serial.print("PM 1.0 (ug / m^3): ");
+    Serial.println(pm_sensor_data.pm10_standard);
+    Serial.print("PM 2.5 (ug / m^3): ");
+    Serial.println(pm_sensor_data.pm25_standard);
+    Serial.print("PM 10 (ug / m^3) - likelly reapeats PM 2.5: ");
     Serial.println(pm_sensor_data.pm100_standard);
-    Serial.println("---------------------------------------");
-    Serial.println("Concentration Units (environmental)");
-    Serial.print("PM 1.0: ");
-    Serial.print(pm_sensor_data.pm10_env);
-    Serial.print("\t\tPM 2.5: ");
-    Serial.print(pm_sensor_data.pm25_env);
-    Serial.print("\t\tPM 10: ");
-    Serial.println(pm_sensor_data.pm100_env);
-    Serial.println("---------------------------------------");
-    Serial.print("Particles > 0.3um / 0.1L air:");
+    Serial.print("Particles > 0.3 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_03um);
-    Serial.print("Particles > 0.5um / 0.1L air:");
+    Serial.print("Particles > 0.5 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_05um);
-    Serial.print("Particles > 1.0um / 0.1L air:");
+    Serial.print("Particles > 1.0 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_10um);
-    Serial.print("Particles > 2.5um / 0.1L air:");
+    Serial.print("Particles > 2.5 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_25um);
-    Serial.print("Particles > 5.0um / 0.1L air:");
+    Serial.print("Particles > 5.0 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_50um);
-    Serial.print("Particles > 50 um / 0.1L air:");
+    Serial.print("Particles > 50 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_100um);
-    Serial.println("---------------------------------------");
 }
 
 #endif // PARTICLE_SENSOR_H
