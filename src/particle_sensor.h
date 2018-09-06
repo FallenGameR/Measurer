@@ -92,6 +92,7 @@ void PmRead()
 {
     if (!ReadPmSensor(&pm_sensor))
     {
+        delay(100);
         return;
     }
 

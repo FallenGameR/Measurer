@@ -44,7 +44,7 @@ void loop()
   // DATA:    364
   // PROGRAM: 1282
   PmRead();
-  delay(100);
+  delay(1000);
 
   // BME
   // DATA:    256
