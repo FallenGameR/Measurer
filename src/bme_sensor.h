@@ -26,15 +26,25 @@ void BmeSetup()
             ;
     }
 
-    // Set up oversampling and filter initialization
+    // Set up oversampling for noise reduction
+
+    // Temperature reading is used to correct for temperature variations of other samples
     bme.setTemperatureOversampling(BME680_OS_8X);
     bme.setHumidityOversampling(BME680_OS_2X);
     bme.setPressureOversampling(BME680_OS_4X);
+    // Supresses short disturbances of data and
+    // increases resolution of sensors
     bme.setIIRFilterSize(BME680_FILTER_SIZE_3);
     bme.setGasHeater(320, 150); // 320*C for 150 ms
 }
 
-// 2 sec delay needed between readings
+// In Celcius
+double ReadTemperatureBme()
+{
+    return bme.temperature;
+}
+
+// 1 sec delay between readings
 void BmeRead()
 {
     if (!bme.performReading())
@@ -43,19 +53,33 @@ void BmeRead()
         return;
     }
 
+    // At 25C accuracy 0.5C
+    // Full accuracy on 0-65C range is 1C
     Serial.print("Temperature = ");
     Serial.print(bme.temperature);
     Serial.println(" *C");
 
+    // Absolute accuracy preassure 600Pa
+    // 0.12Pa RMS noise
+    // 1.3Pa/K offset temperature coefficient (10.9 cm per 1 Celcius)
+    // Long term stability 100Pa per year
     Serial.print("Pressure = ");
     Serial.print(bme.pressure / 100.0);
     Serial.println(" hPa");
 
+    // ~8 seconds for response
+    // 3% accuracy
+    // Long term stability 0.5% per year
     Serial.print("Humidity = ");
     Serial.print(bme.humidity);
     Serial.println(" %");
 
     // Takes 30 min to stabilize. Then the reading is used for baseline.
+    // ~1 seconds for response
+    // IAQ index output 0..500. To 50 good, to 100 average, after 300 very bad
+    // RMS noise of resistance 1.5%
+    // 15% seonsor to sensor deviation
+    // Detects: Ethane, Isoprene, Ethanol, Acetone, Carbone Monoxide, certified accuracy 5% max
     Serial.print("Gas = ");
     Serial.print(bme.gas_resistance / 1000.0);
     Serial.println(" KOhms");
