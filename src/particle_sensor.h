@@ -31,7 +31,7 @@ boolean ReadPmSensor(Stream *s)
 {
     if (!s->available())
     {
-        Serial.println("PM error: no data available");
+        //Serial.println("PM error: no data available");
         return false;
     }
 
@@ -39,14 +39,14 @@ boolean ReadPmSensor(Stream *s)
     if (s->peek() != 0x42)
     {
         s->read();
-        Serial.println("PM error: waiting for the start byte");
+        //Serial.println("PM error: waiting for the start byte");
         return false;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
-        Serial.println("PM error: not enough data to deserialize");
+        //Serial.println("PM error: not enough data to deserialize");
         return false;
     }
 
@@ -80,7 +80,7 @@ boolean ReadPmSensor(Stream *s)
 
     if (sum != pm_sensor_data.checksum)
     {
-        Serial.println("PM error: checksum failure");
+        //Serial.println("PM error: checksum failure");
         return false;
     }
 
@@ -90,10 +90,9 @@ boolean ReadPmSensor(Stream *s)
 
 void PmRead()
 {
-    if (!ReadPmSensor(&pm_sensor))
+    while (!ReadPmSensor(&pm_sensor))
     {
-        delay(100);
-        return;
+        delay(1);
     }
 
     // reading pm_sensor_data was successful!
