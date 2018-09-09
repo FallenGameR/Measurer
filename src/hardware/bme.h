@@ -1,11 +1,11 @@
-#ifndef BME_SENSOR_H
-#define BME_SENSOR_H
+#ifndef BME_H
+#define BME_H
 
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME680.h>
-#include "pins.h"
+#include "..\pins.h"
 
 // You can also calculate Altitude. However, you can only really do a good accurate job of calculating altitude if
 // you know the hPa pressure at sea level for your location and day! The sensor is quite precise but if you do not
@@ -91,4 +91,4 @@ void BmeRead()
     Serial.println();
 }
 
-#endif
+#endif // BME_H

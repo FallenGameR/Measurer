@@ -1,8 +1,8 @@
-#ifndef PARTICLE_SENSOR_H
-#define PARTICLE_SENSOR_H
+#ifndef PARTICLE_H
+#define PARTICLE_H
 
 #include <SoftwareSerial.h>
-#include "pins.h"
+#include "..\pins.h"
 
 // https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
 // PM10 and more likelly can be ignored. Looks like the sensor just multiplies P2.5 reading to output P10
@@ -119,4 +119,4 @@ void PmRead()
     Serial.println(pm_sensor_data.particles_100um);
 }
 
-#endif // PARTICLE_SENSOR_H
+#endif // PARTICLE_H

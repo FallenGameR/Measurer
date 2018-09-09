@@ -1,8 +1,8 @@
-#ifndef TERMISTOR_OUTPUT_H
-#define TERMISTOR_OUTPUT_H
+#ifndef TERMISTOR_H
+#define TERMISTOR_H
 
-#include "pins.h"
-#include "graph.h"
+#include "..\pins.h"
+#include "..\graph.h"
 
 // The value of resistor connected sequential with termistor in ohms
 #define SERIESRESISTOR 1e4
@@ -67,4 +67,4 @@ void DrawTemperatureTermistor()
     }
 }
 
-#endif // TERMISTOR_OUTPUT_H
+#endif // TERMISTOR_H

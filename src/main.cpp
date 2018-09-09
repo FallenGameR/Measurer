@@ -1,9 +1,7 @@
-#include "graph.h"
-#include "pins.h"
-#include "termistor.h"
-#include "particle_sensor.h"
-#include "bme_sensor.h"
-#include "rtc.h"
+#include "hardware\termistor.h"
+#include "hardware\particle.h"
+#include "hardware\sensor.h"
+#include "hardware\rtc.h"
 
 void setup()
 {
