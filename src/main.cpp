@@ -1,7 +1,7 @@
-#include "hardware\termistor.h"
+#include "hardware\bme.h"
 #include "hardware\particle.h"
-#include "hardware\sensor.h"
 #include "hardware\rtc.h"
+#include "hardware\termistor.h"
 
 void setup()
 {
