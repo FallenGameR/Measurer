@@ -31,7 +31,7 @@ void loop()
   // All
   // DATA:     1603 /  2048 = 78.3%
   // PROGRAM: 29592 / 32256 = 91.7% (2664 left)
-  //tft.fillScreen(BLACK);
+  tft.fillScreen(BLACK);
 
   // Graph termistor
   // DATA:    26
@@ -41,8 +41,9 @@ void loop()
   // PM
   // DATA:    364
   // PROGRAM: 1282
-  PmRead();
-  delay(1000);
+  DrawPmSensor();
+  //ReadPmSensor();
+  //delay(1000);
 
   // BME
   // DATA:    256

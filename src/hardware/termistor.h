@@ -63,7 +63,7 @@ void DrawTemperatureTermistor()
         line.xhi = x;
         line.yhi = ReadTemperatureTermistor();
         Graph(tft, screen, plot, line, GREEN);
-        delay(250);
+        delay(1000);
     }
 }
 

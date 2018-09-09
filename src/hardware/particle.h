@@ -3,6 +3,11 @@
 
 #include <SoftwareSerial.h>
 #include "..\pins.h"
+#include "..\graph.h"
+
+// For UNO and others without hardware serial, we must use software serial.
+// First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
+SoftwareSerial pm_sensor(PIN_PM_SERIAL, PIN_PM_UNUSED);
 
 // https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
 // PM10 and more likelly can be ignored. Looks like the sensor just multiplies P2.5 reading to output P10
@@ -11,7 +16,6 @@
 // This study also show linear correlation between PM10 and PM2.5 reading
 // It also shows likelly functional dependancy of standarf (CF1) and Atmospheric Environment (env) reading
 // Looks like CF1 is normalized data that adheres to some standart, we should be using it for render
-
 struct pms5003data
 {
     uint16_t framelen;
@@ -22,12 +26,7 @@ struct pms5003data
     uint16_t checksum;
 };
 
-// For UNO and others without hardware serial, we must use software serial.
-// First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
-SoftwareSerial pm_sensor(PIN_PM_SERIAL, PIN_PM_UNUSED);
-struct pms5003data pm_sensor_data;
-
-boolean ReadPmSensor(Stream *s)
+boolean ReadPmSensor(Stream *s, pms5003data *o)
 {
     if (!s->available())
     {
@@ -76,9 +75,9 @@ boolean ReadPmSensor(Stream *s)
     }
 
     // put it into a nice struct :)
-    memcpy((void *)&pm_sensor_data, (void *)buffer_u16, 30);
+    memcpy((void *)o, (void *)buffer_u16, 30);
 
-    if (sum != pm_sensor_data.checksum)
+    if (sum != o->checksum)
     {
         //Serial.println("PM error: checksum failure");
         return false;
@@ -88,23 +87,32 @@ boolean ReadPmSensor(Stream *s)
     return true;
 }
 
-void PmRead()
+void ReadPmSensor(pms5003data *data)
 {
-    while (!ReadPmSensor(&pm_sensor))
+    // Read until successful
+    while (!ReadPmSensor(&pm_sensor, data))
     {
         delay(1);
     }
+}
+
+void ReadPmSensor()
+{
+    struct pms5003data pm_sensor_data;
+    ReadPmSensor(&pm_sensor_data);
 
     // reading pm_sensor_data was successful!
     Serial.println();
     Serial.println("---------------------------------------");
     Serial.println("Concentration Units (standard)");
+
     Serial.print("PM 1.0 (ug / m^3): ");
     Serial.println(pm_sensor_data.pm10_standard);
     Serial.print("PM 2.5 (ug / m^3): ");
     Serial.println(pm_sensor_data.pm25_standard);
     Serial.print("PM 10 (ug / m^3) - likelly reapeats PM 2.5: ");
     Serial.println(pm_sensor_data.pm100_standard);
+
     Serial.print("Particles > 0.3 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_03um);
     Serial.print("Particles > 0.5 um / 0.1 L air:");
@@ -117,6 +125,49 @@ void PmRead()
     Serial.println(pm_sensor_data.particles_50um);
     Serial.print("Particles > 50 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_100um);
+}
+
+void DrawPmSensor()
+{
+    struct pms5003data data; //
+    ReadPmSensor(&data);     //
+
+    double x = 0;
+    double y = data.particles_03um; //
+
+    box screen;
+    screen.xlo = 0;
+    screen.ylo = 0;
+    screen.xhi = tft.width() - 1;
+    screen.yhi = tft.height() - 1;
+
+    box plot;
+    plot.xlo = 0;
+    plot.xhi = 60;
+    plot.ylo = (int)y - 300; //
+    plot.yhi = (int)y + 300; //
+
+    box line;
+    line.xlo = MAP_X(x, plot, screen);
+    line.ylo = MAP_Y(y, plot, screen);
+
+    // Draw grid                          //
+    InitializeGrid(tft, screen, plot, 10, 100, DKBLUE, WHITE, BLACK);
+    //                                //                               //
+    InitializeAxes(tft, screen, plot, "P > 0.3 um in 0.1L air", "sec", "particles", RED, WHITE, BLACK);
+
+    // Draw graph
+    for (double x = 1; x <= 60; x += 1)
+    {
+        ReadPmSensor(&data); //
+        line.xhi = x;
+        line.yhi = data.particles_03um; //
+        Graph(tft, screen, plot, line, GREEN);
+        delay(1000);
+
+        //Serial.print("PM 1.0 (ug / m^3): ");
+        //Serial.println(data.pm10_standard);
+    }
 }
 
 #endif // PARTICLE_H
