@@ -10,7 +10,7 @@ void setup()
   tft.begin();
   tft.setRotation(1);
 
-  Serial.println("ILI9341 screen");
+  Serial.println("Screen properties");
   Serial.print("Width: ");
   Serial.println(tft.width());
   Serial.print("Height: ");
