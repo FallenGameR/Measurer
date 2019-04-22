@@ -1,10 +1,14 @@
 #ifndef PINS_H
 #define PINS_H
 
-// TFT pins
+/// TFT pins
+// Data/clock
 #define PIN_TFT_DC 25
+// Chip select
 #define PIN_TFT_CS 24
+// Data out
 #define PIN_TFT_MOSI 23
+// Clock
 #define PIN_TFT_CLK 22
 
 // Unused TFT pins
