@@ -12,8 +12,8 @@
 #define PIN_TFT_CLK 22
 
 // Unused TFT pins
-#define PIN_TFT_RST -1
-#define PIN_TFT_MISO -1
+#define PIN_TFT_RST 0
+#define PIN_TFT_MISO 0
 
 // Sensor pins
 #define PIN_TERMISTOR A15

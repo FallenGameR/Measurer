@@ -32,7 +32,19 @@ void loop()
   // All
   // DATA:     1603 /  2048 = 78.3%
   // PROGRAM: 29592 / 32256 = 91.7% (2664 left)
-  tft.fillScreen(BLACK);
+  uint16_t red = tft.color565(0xFF, 0, 0);
+
+  Serial.print("Red (const): ");
+  Serial.println(RED);
+
+  Serial.print("Red (found): ");
+  Serial.println(red);
+
+  tft.fillScreen(red);
+
+  // FF - Light green/olive
+  // FF00 - blue
+  // FF0000 - white
 
   // Graph termistor - makes screen white
   // DATA:    26
