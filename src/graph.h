@@ -1,11 +1,12 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <Adafruit_ILI9341.h>
+#include <Adafruit_TFTLCD.h>
+#include <Adafruit_GFX.h>
 #include "colors.h"
 #include "pins.h"
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(PIN_TFT_CS, PIN_TFT_DC, PIN_TFT_MOSI, PIN_TFT_CLK, PIN_TFT_RST, PIN_TFT_MISO);
+Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_DC, PIN_TFT_MOSI, PIN_TFT_CLK, PIN_TFT_RST);
 
 #define TITLE_PADDING_HORIZONTAL 0
 #define TITLE_PADDING_VERTICAL 2
@@ -32,7 +33,7 @@ struct box
 };
 
 void InitializeGrid(
-    Adafruit_ILI9341 &d, // display object
+    Adafruit_TFTLCD &d, // display object
     box &screen,
     box &plot,
     double xinc,         // increments on x axis
@@ -66,7 +67,7 @@ void InitializeGrid(
 }
 
 void InitializeAxes(
-    Adafruit_ILI9341 &d, // display object
+    Adafruit_TFTLCD &d, // display object
     box &screen,
     box &plot,
     String title,        // title of graph
@@ -98,7 +99,7 @@ void InitializeAxes(
     d.print(xlabel);
 }
 
-void Graph(Adafruit_ILI9341 &d, box &screen, box &plot, box &line, unsigned int color)
+void Graph(Adafruit_TFTLCD &d, box &screen, box &plot, box &line, unsigned int color)
 {
     double x = MAP_X(line.xhi, plot, screen);
     double y = MAP_Y(line.yhi, plot, screen);
