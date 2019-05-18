@@ -18,8 +18,10 @@
 // Reset (unused)
 #define PIN_TFT_RST 0
 
-// Sensor pins
+/// Termistor pin
 #define PIN_TERMISTOR A15
+
+// Sensor pins
 #define PIN_DHT11 6
 
 // Particle concentration sensor
