@@ -6,7 +6,7 @@
 #include "colors.h"
 #include "pins.h"
 
-Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_DC, PIN_TFT_MOSI, PIN_TFT_CLK, PIN_TFT_RST);
+Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_CD, PIN_TFT_WR, PIN_TFT_RD, PIN_TFT_RST);
 
 #define TITLE_PADDING_HORIZONTAL 0
 #define TITLE_PADDING_VERTICAL 2

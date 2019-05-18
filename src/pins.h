@@ -2,18 +2,21 @@
 #define PINS_H
 
 /// TFT pins
-// Data/clock
-#define PIN_TFT_DC 25
-// Chip select
-#define PIN_TFT_CS 24
-// Data out
-#define PIN_TFT_MOSI 23
-// Clock
-#define PIN_TFT_CLK 22
+// For the Arduino Mega, use digital pins 22 through 29
+// The control pins for the LCD can be assigned to any digital or
+// analog pins...but we'll use the analog pins as this allows us to
+// double up the pins with the touch screen (see the TFT paint example).
 
-// Unused TFT pins
+// Chip select
+#define PIN_TFT_CS A3
+// Command/Data
+#define PIN_TFT_CD A2
+// LCD Write
+#define PIN_TFT_WR A1
+// LCD Read
+#define PIN_TFT_RD A0
+// Reset (unused)
 #define PIN_TFT_RST 0
-#define PIN_TFT_MISO 0
 
 // Sensor pins
 #define PIN_TERMISTOR A15
