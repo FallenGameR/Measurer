@@ -16,7 +16,8 @@
 // The beta coefficient of the thermistor from datasheet
 #define BCOEFFICIENT 3950
 
-double ReadTemperatureTermistor()
+// 22 on termistor is 19 on pro termometer
+104609 double ReadTemperatureTermistor()
 {
     int vi = analogRead(PIN_TERMISTOR);
     double r = SERIESRESISTOR / (1023.0 / vi - 1.0);
@@ -55,7 +56,7 @@ void DrawTemperatureTermistor()
 
     // Draw grid
     InitializeGrid(tft, screen, plot, 10, 1, DKBLUE, WHITE, BLACK);
-    InitializeAxes(tft, screen, plot, "Temparature", "sec", "C", RED, WHITE, BLACK);
+    InitializeAxes(tft, screen, plot, "Temperature", "sec", "C", RED, WHITE, BLACK);
 
     // Draw graph
     for (double x = 1; x <= 60; x += 1)

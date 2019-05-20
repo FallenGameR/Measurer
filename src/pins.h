@@ -21,12 +21,12 @@
 /// Termistor pin
 #define PIN_TERMISTOR A15
 
+// Particle concentration sensor
+#define PIN_PM_SERIAL 2
+#define PIN_PM_UNUSED 0
+
 // Sensor pins
 #define PIN_DHT11 6
-
-// Particle concentration sensor
-#define PIN_PM_SERIAL 39
-#define PIN_PM_UNUSED -1
 
 // BME pins
 #define PIN_BME_SCK 34

@@ -26,11 +26,17 @@ struct pms5003data
     uint16_t checksum;
 };
 
+void PmSetup()
+{
+    // PM sensor baud rate is 9600
+    pm_sensor.begin(9600);
+}
+
 boolean ReadPmSensor(Stream *s, pms5003data *o)
 {
     if (!s->available())
     {
-        //Serial.println("PM error: no data available");
+        Serial.println("PM error: no data available");
         return false;
     }
 
@@ -38,14 +44,14 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
     if (s->peek() != 0x42)
     {
         s->read();
-        //Serial.println("PM error: waiting for the start byte");
+        Serial.println("PM error: waiting for the start byte");
         return false;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
-        //Serial.println("PM error: not enough data to deserialize");
+        Serial.println("PM error: not enough data to deserialize");
         return false;
     }
 
@@ -79,7 +85,7 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
 
     if (sum != o->checksum)
     {
-        //Serial.println("PM error: checksum failure");
+        Serial.println("PM error: checksum failure");
         return false;
     }
 
