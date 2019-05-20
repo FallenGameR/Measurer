@@ -133,6 +133,19 @@ void ReadPmSensor()
     Serial.println(pm_sensor_data.particles_100um);
 }
 
+struct canvas
+{
+    box screen;
+    box plot;
+    Adafruit_TFTLCD tft;
+};
+
+class Canvas
+{
+public:
+    Canvas(Adafruit_TFTLCD tft);
+};
+
 void DrawPmSensor()
 {
     struct pms5003data data; //
@@ -163,21 +176,25 @@ void DrawPmSensor()
     Serial.println(pm_sensor_data.particles_100um);
 /**/
 
-    box screen;
-    screen.xlo = 0;
-    screen.ylo = 0;
-    screen.xhi = tft.width() - 1;
-    screen.yhi = tft.height() - 1;
+    double sd = 100;
+    canvas cv;
 
-    box plot;
-    plot.xlo = 0;
-    plot.xhi = 60;
-    plot.ylo = (int)y - 300; //
-    plot.yhi = (int)y + 300; //
+    // x interval:
+    // 1 min = 60 sec
+    // 10 min
+    // 1 hour?
+    // 1 day - bound to RTC
 
-    box line;
-    line.xlo = MAP_X(x, plot, screen);
-    line.ylo = MAP_Y(y, plot, screen);
+    // y interval - bound to data, ok to store some initial settings, refine them via the latest data
+
+    // display many lines at the same time
+    // do not waste RAM memory
+    // ok to use flash alot
+    // binary format for storage for random reads and writes, convert to csv
+
+    box screen = {0, tft.width() - 1.0, 0, tft.height() - 1.0}; // const, but would need to leave space for controls
+    box plot = {0, 60, y - 3 * sd, y + 3 * sd};
+    box line = {MAP_X(x, plot, screen), 0, MAP_Y(y, plot, screen), 0};
 
     // Draw grid                          //
     InitializeGrid(tft, screen, plot, 10, 100, DKBLUE, WHITE, BLACK);

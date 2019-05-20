@@ -27,8 +27,8 @@ Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_CD, PIN_TFT_WR, PIN_TF
 struct box
 {
     double xlo;
-    double ylo;
     double xhi;
+    double ylo;
     double yhi;
 };
 
