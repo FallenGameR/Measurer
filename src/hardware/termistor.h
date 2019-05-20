@@ -17,7 +17,7 @@
 #define BCOEFFICIENT 3950
 
 // 22 on termistor is 19 on pro termometer
-104609 double ReadTemperatureTermistor()
+double ReadTemperatureTermistor()
 {
     int vi = analogRead(PIN_TERMISTOR);
     double r = SERIESRESISTOR / (1023.0 / vi - 1.0);

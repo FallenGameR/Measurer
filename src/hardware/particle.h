@@ -36,7 +36,7 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
 {
     if (!s->available())
     {
-        Serial.println("PM error: no data available");
+        //Serial.println("PM error: no data available");
         return false;
     }
 
@@ -44,14 +44,14 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
     if (s->peek() != 0x42)
     {
         s->read();
-        Serial.println("PM error: waiting for the start byte");
+        //Serial.println("PM error: waiting for the start byte");
         return false;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
-        Serial.println("PM error: not enough data to deserialize");
+        //Serial.println("PM error: not enough data to deserialize");
         return false;
     }
 
@@ -66,11 +66,11 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
     }
 
     /* debugging
-  for (uint8_t i=2; i<32; i++) {
-    Serial.print("0x"); Serial.print(buffer[i], HEX); Serial.print(", ");
-  }
-  Serial.println();
-  */
+    for (uint8_t i=2; i<32; i++) {
+        Serial.print("0x"); Serial.print(buffer[i], HEX); Serial.print(", ");
+    }
+    Serial.println();
+    */
 
     // The pm_sensor_data comes in endian'd, this solves it so it works on all platforms
     uint16_t buffer_u16[15];
@@ -85,7 +85,7 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
 
     if (sum != o->checksum)
     {
-        Serial.println("PM error: checksum failure");
+        //Serial.println("PM error: checksum failure");
         return false;
     }
 
@@ -140,6 +140,28 @@ void DrawPmSensor()
 
     double x = 0;
     double y = data.particles_03um; //
+
+    /*
+    Serial.print("PM 1.0 (ug / m^3): ");
+    Serial.println(pm_sensor_data.pm10_standard);
+    Serial.print("PM 2.5 (ug / m^3): ");
+    Serial.println(pm_sensor_data.pm25_standard);
+    Serial.print("PM 10 (ug / m^3) - likelly reapeats PM 2.5: ");
+    Serial.println(pm_sensor_data.pm100_standard);
+
+    Serial.print("Particles > 0.3 um / 0.1 L air:");
+    Serial.println(pm_sensor_data.particles_03um);
+    Serial.print("Particles > 0.5 um / 0.1 L air:");
+    Serial.println(pm_sensor_data.particles_05um);
+    Serial.print("Particles > 1.0 um / 0.1 L air:");
+    Serial.println(pm_sensor_data.particles_10um);
+    Serial.print("Particles > 2.5 um / 0.1 L air:");
+    Serial.println(pm_sensor_data.particles_25um);
+    Serial.print("Particles > 5.0 um / 0.1 L air:");
+    Serial.println(pm_sensor_data.particles_50um);
+    Serial.print("Particles > 50 um / 0.1 L air:");
+    Serial.println(pm_sensor_data.particles_100um);
+/**/
 
     box screen;
     screen.xlo = 0;

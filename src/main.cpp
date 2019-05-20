@@ -1,9 +1,9 @@
-//#include "hardware\termistor.h"
-//#include "hardware\particle.h"
+#include "hardware\termistor.h"
+#include "hardware\particle.h"
 //#include "hardware\bme.h"
 //#include "hardware\rtc.h"
 
-//*
+/*
 // On Leonardo/Micro or others with hardware serial, use those!
 // uncomment this line:
 // #define pmsSerial Serial1
@@ -132,13 +132,14 @@ void loop()
   }
 }
 
-/*
+*/
+
 // Ctrl+Alt+U to upload
 void setup(void)
 {
   Serial.begin(115200);
   TftSetup();
-  //PmSetup();
+  PmSetup();
 }
 
 void loop(void)
@@ -147,9 +148,9 @@ void loop(void)
   tft.fillScreen(BLACK);
 
   // Draw termistor reading (1s)
-  DrawTemperatureTermistor();
+  //DrawTemperatureTermistor();
 
-  //DrawPmSensor();
+  DrawPmSensor();
 }
 
 /*

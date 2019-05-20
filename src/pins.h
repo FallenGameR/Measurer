@@ -22,7 +22,7 @@
 #define PIN_TERMISTOR A15
 
 // Particle concentration sensor
-#define PIN_PM_SERIAL 2
+#define PIN_PM_SERIAL A14
 #define PIN_PM_UNUSED 0
 
 // Sensor pins
