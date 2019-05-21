@@ -133,18 +133,112 @@ void ReadPmSensor()
     Serial.println(pm_sensor_data.particles_100um);
 }
 
-struct canvas
+enum TraceType
 {
-    box screen;
-    box plot;
-    Adafruit_TFTLCD tft;
+    TERMISTOR,
+    PM_1,
+    PM_2_5,
+    PM_10,
+    PM_03_um,
+    PM_05_um,
+    PM_10_um,
+    PM_25_um,
+    PM_50_um,
+    PM_100_um,
+    TraceTypeLength
 };
+
+class Canvas;
+
+class Trace
+{
+private:
+    Canvas *canvas;
+    TraceType type;
+    box lastSegment;
+
+public:
+    Trace(Canvas *canvas, TraceType type, double x0, double y0);
+    unsigned int GetColor();
+    box DrawTo(double x, double y);
+};
+
 
 class Canvas
 {
+private:
+    const int ControlsPaneWidth = 0;
+
+    Adafruit_TFTLCD *display;
+    box plot_space;
+    box disp_space;
+    Trace *traces[TraceType::TraceTypeLength];
+
 public:
-    Canvas(Adafruit_TFTLCD tft);
+    Canvas(Adafruit_TFTLCD *display, box plot_space)
+    {
+        this->display = display;
+        this->plot_space = plot_space;
+        this->disp_space = {0, display->width() - 1.0 - ControlsPaneWidth, 0, display->height() - 1.0 - ControlsPaneWidth};
+    }
+
+    ~Canvas()
+    {
+        for (auto &&i : traces)
+        {
+            
+        }
+        
+    }
+
+    Adafruit_TFTLCD *GetDisplay()
+    {
+        return this->display;
+    }
+
+    void Draw(TraceType type, double x, double y)
+    {
+        x = MAP_X(x, this->plot_space, this->disp_space);
+        y = MAP_Y(y, this->plot_space, this->disp_space);
+
+        if (traces[type])
+        {
+            traces[type]->DrawTo(x, y);
+        }
+        else
+        {
+            traces[type] = new Trace(this, type, x, y);
+        }
+    }
 };
+
+Trace::Trace(Canvas *canvas, TraceType type, double x0, double y0)
+{
+    this->canvas = canvas;
+    this->type = type;
+    this->lastSegment = {x0, 0, y0, 0};
+}
+
+unsigned int Trace::GetColor()
+{
+    // TODO: map from type to color
+    return GREEN;
+}
+
+box Trace::DrawTo(double x, double y)
+{
+    // preparation
+    unsigned int color = this->GetColor();
+    double x0 = this->lastSegment.xlo;
+    double y0 = this->lastSegment.ylo;
+    this->lastSegment.xlo = x;
+    this->lastSegment.ylo = y;
+
+    // bold line 3 pixel in width
+    this->canvas->GetDisplay()->drawLine(x0, y0 - 1, x, y - 1, color);
+    this->canvas->GetDisplay()->drawLine(x0, y0 + 0, x, y + 0, color);
+    this->canvas->GetDisplay()->drawLine(x0, y0 + 1, x, y + 1, color);
+}
 
 void DrawPmSensor()
 {
@@ -153,31 +247,7 @@ void DrawPmSensor()
 
     double x = 0;
     double y = data.particles_03um; //
-
-    /*
-    Serial.print("PM 1.0 (ug / m^3): ");
-    Serial.println(pm_sensor_data.pm10_standard);
-    Serial.print("PM 2.5 (ug / m^3): ");
-    Serial.println(pm_sensor_data.pm25_standard);
-    Serial.print("PM 10 (ug / m^3) - likelly reapeats PM 2.5: ");
-    Serial.println(pm_sensor_data.pm100_standard);
-
-    Serial.print("Particles > 0.3 um / 0.1 L air:");
-    Serial.println(pm_sensor_data.particles_03um);
-    Serial.print("Particles > 0.5 um / 0.1 L air:");
-    Serial.println(pm_sensor_data.particles_05um);
-    Serial.print("Particles > 1.0 um / 0.1 L air:");
-    Serial.println(pm_sensor_data.particles_10um);
-    Serial.print("Particles > 2.5 um / 0.1 L air:");
-    Serial.println(pm_sensor_data.particles_25um);
-    Serial.print("Particles > 5.0 um / 0.1 L air:");
-    Serial.println(pm_sensor_data.particles_50um);
-    Serial.print("Particles > 50 um / 0.1 L air:");
-    Serial.println(pm_sensor_data.particles_100um);
-/**/
-
     double sd = 100;
-    canvas cv;
 
     // x interval:
     // 1 min = 60 sec
