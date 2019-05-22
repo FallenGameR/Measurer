@@ -5,7 +5,7 @@
 #include <Adafruit_GFX.h>
 #include "plot/box.h"
 #include "plot/macro.h"
-#include "colors.h"
+#include "plot/colors.h"
 #include "pins.h"
 
 Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_CD, PIN_TFT_WR, PIN_TFT_RD, PIN_TFT_RST);

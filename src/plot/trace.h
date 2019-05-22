@@ -16,7 +16,7 @@ private:
 public:
     Trace(Canvas *canvas, TraceType type, double x0, double y0);
     unsigned int GetColor();
-    box DrawTo(double x, double y);
+    void DrawTo(double x, double y);
 };
 
 #endif // TRACE_H

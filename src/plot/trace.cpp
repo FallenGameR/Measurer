@@ -1,5 +1,7 @@
 #include "trace.h"
 #include "canvas.h"
+#include "colors.h"
+#include <Adafruit_TFTLCD.h>
 
 Trace::Trace(Canvas *canvas, TraceType type, double x0, double y0)
 {
@@ -14,7 +16,7 @@ unsigned int Trace::GetColor()
     return GREEN;
 }
 
-box Trace::DrawTo(double x, double y)
+void Trace::DrawTo(double x, double y)
 {
     // preparation
     unsigned int color = this->GetColor();

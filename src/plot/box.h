@@ -9,4 +9,4 @@ struct box
     double yhi;
 };
 
-#endif BOX_H
+#endif // BOX_H
