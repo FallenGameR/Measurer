@@ -4,6 +4,7 @@
 #include <Adafruit_TFTLCD.h>
 #include <Adafruit_GFX.h>
 #include "plot/box.h"
+#include "plot/macro.h"
 #include "colors.h"
 #include "pins.h"
 
@@ -21,9 +22,6 @@ Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_CD, PIN_TFT_WR, PIN_TF
 #define LEGEND_PADDING_Y_VERTICAL 2
 #define LEGEND_PADDING_X_HORIZONTAL -12
 #define LEGEND_PADDING_X_VERTICAL -8
-
-#define MAP_X(x, plot, screen) (screen.xlo + (x - plot.xlo) * (screen.xhi - screen.xlo) / (plot.xhi - plot.xlo))
-#define MAP_Y(y, plot, screen) (screen.yhi - (y - plot.ylo) * (screen.yhi - screen.ylo) / (plot.yhi - plot.ylo))
 
 void TftSetup()
 {

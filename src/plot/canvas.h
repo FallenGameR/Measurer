@@ -15,7 +15,7 @@ private:
     Adafruit_TFTLCD *display;
     box plot_space;
     box disp_space;
-    Trace *traces[TraceType::TraceTypeLength];
+    Trace *traces[TraceType::Length];
 
 public:
     Canvas(Adafruit_TFTLCD *display, box plot_space);

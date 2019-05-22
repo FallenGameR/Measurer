@@ -1,16 +1,21 @@
 #include "canvas.h"
 #include "trace.h"
+#include "macro.h"
+#include <Adafruit_TFTLCD.h>
 
 Canvas::Canvas(Adafruit_TFTLCD *display, box plot_space)
 {
     this->display = display;
     this->plot_space = plot_space;
-    this->disp_space = {0, display->width() - 1.0 - ControlsPaneWidth, 0, display->height() - 1.0 - ControlsPaneWidth};
-}
+    this->disp_space.xlo = 0;
+    this->disp_space.xhi = display->width() - 1.0 - Canvas::ControlsPaneWidth;
+    this->disp_space.ylo = 0;
+    this->disp_space.yhi = display->height() - 1.0 - Canvas::ControlsPaneWidth;
+};
 
 Canvas::~Canvas()
 {
-    for (auto &&trace : traces)
+    for (auto &&trace : this->traces)
     {
         delete (trace);
     }
