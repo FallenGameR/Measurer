@@ -3,6 +3,7 @@
 
 #include <Adafruit_TFTLCD.h>
 #include <Adafruit_GFX.h>
+#include "plot/box.h"
 #include "colors.h"
 #include "pins.h"
 
@@ -23,14 +24,6 @@ Adafruit_TFTLCD tft = Adafruit_TFTLCD(PIN_TFT_CS, PIN_TFT_CD, PIN_TFT_WR, PIN_TF
 
 #define MAP_X(x, plot, screen) (screen.xlo + (x - plot.xlo) * (screen.xhi - screen.xlo) / (plot.xhi - plot.xlo))
 #define MAP_Y(y, plot, screen) (screen.yhi - (y - plot.ylo) * (screen.yhi - screen.ylo) / (plot.yhi - plot.ylo))
-
-struct box
-{
-    double xlo;
-    double xhi;
-    double ylo;
-    double yhi;
-};
 
 void TftSetup()
 {
