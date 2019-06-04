@@ -13,10 +13,10 @@ void DrawPmSensor()
     // auto pointers
 
     double x = 0;
-    double y = data->particles_03um; //
+    double y = 0;  //data->particles_03um; //
     double sd = 100;
 
-    delete data;
+    //delete data;
 
     // x interval:
     // 1 min = 60 sec

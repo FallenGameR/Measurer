@@ -141,6 +141,6 @@ ParticleReading *ParticleSensor::Read()
 ParticleReading *ParticleSensor::Read(uint32_t timeoutMs)
 {
     pms5003data data;
-    TIMEOUT_READ(Read(&data), timeoutMs);
+    TIMEOUT_READ(ReadInternal(&data), timeoutMs);
     return new ParticleReading(&data);
 }
