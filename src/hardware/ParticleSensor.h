@@ -1,21 +1,24 @@
 #ifndef PARTICLE_SENSOR_H
 #define PARTICLE_SENSOR_H
 
-#define TIMEOUT_READ(readOperation, timeout)   \
-    {                                          \
-        auto started = millis();               \
-        while (!(readOperation))               \
-        {                                      \
-            if (millis() - started >= timeout) \
-            {                                  \
-                return nullptr;                \
-            }                                  \
-            else                               \
-            {                                  \
-                delay(1);                      \
-            }                                  \
-        }                                      \
+#define TIMEOUT_READ(readOperation, timeoutMs)   \
+    {                                            \
+        auto started = millis();                 \
+        while (!(readOperation))                 \
+        {                                        \
+            if (millis() - started >= timeoutMs) \
+            {                                    \
+                return nullptr;                  \
+            }                                    \
+            else                                 \
+            {                                    \
+                delay(1);                        \
+            }                                    \
+        }                                        \
     }
+
+class SoftwareSerial;
+#define DEFAULT_READ_TIMEMOUT_MS 1000
 
 // https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
 // PM10 and more likelly can be ignored. Looks like the sensor just multiplies P2.5 reading to output P10
@@ -39,21 +42,21 @@ public:
     ParticleReading(pms5003data *data);
 };
 
-class SoftwareSerial;
 
 class ParticleSensor
 {
 private:
-    // For UNO and others without hardware serial, we must use software serial.
+    // For UNO and others without hardware serial, we must use software serial.b
     // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
 
     SoftwareSerial *pm_sensor;
-    bool Read();
+    bool ReadInternal();
 
 public:
     ParticleSensor();
     ~ParticleSensor();
-    ParticleReading *Read(uint32_t timeout);
+    ParticleReading *Read();
+    ParticleReading *Read(uint32_t timeoutMs);
 }
 
 

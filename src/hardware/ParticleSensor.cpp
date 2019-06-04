@@ -9,9 +9,18 @@
 struct pms5003data
 {
     uint16_t framelen;
-    uint16_t pm10_standard, pm25_standard, pm100_standard;
-    uint16_t pm10_env, pm25_env, pm100_env;
-    uint16_t particles_03um, particles_05um, particles_10um, particles_25um, particles_50um, particles_100um;
+    uint16_t pm10_standard;
+    uint16_t pm25_standard;
+    uint16_t pm100_standard;
+    uint16_t pm10_env;
+    uint16_t pm25_env;
+    uint16_t pm100_env;
+    uint16_t particles_03um;
+    uint16_t particles_05um;
+    uint16_t particles_10um;
+    uint16_t particles_25um;
+    uint16_t particles_50um;
+    uint16_t particles_100um;
     uint16_t unused;
     uint16_t checksum;
 };
@@ -47,11 +56,15 @@ ParticleSensor::~ParticleSensor()
     delete this->pm_sensor;
 }
 
-bool ParticleSensor::Read(Stream *s, pms5003data *o)
+bool ParticleSensor::ReadInternal(pms5003data *o)
 {
+    Stream *s = this->pm_sensor;
+
     if (!s->available())
     {
-        //Serial.println("PM error: no data available");
+#ifdef DEBUG
+        Serial.println("PM error: no data available");
+#endif
         return false;
     }
 
@@ -59,14 +72,18 @@ bool ParticleSensor::Read(Stream *s, pms5003data *o)
     if (s->peek() != 0x42)
     {
         s->read();
-        //Serial.println("PM error: waiting for the start byte");
+#ifdef DEBUG
+        Serial.println("PM error: waiting for the start byte");
+#endif
         return false;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
-        //Serial.println("PM error: not enough data to deserialize");
+#ifdef DEBUG
+        Serial.println("PM error: not enough data to deserialize");
+#endif
         return false;
     }
 
@@ -80,12 +97,12 @@ bool ParticleSensor::Read(Stream *s, pms5003data *o)
         sum += buffer[i];
     }
 
-    /* debugging
-for (uint8_t i=2; i<32; i++) {
-    Serial.print("0x"); Serial.print(buffer[i], HEX); Serial.print(", ");
-}
-Serial.println();
-*/
+#ifdef DEBUG
+    for (uint8_t i=2; i<32; i++) {
+        Serial.print("0x"); Serial.print(buffer[i], HEX); Serial.print(", ");
+    }
+    Serial.println();
+#endif
 
     // The pm_sensor_data comes in endian'd, this solves it so it works on all platforms
     uint16_t buffer_u16[15];
@@ -100,7 +117,9 @@ Serial.println();
 
     if (sum != o->checksum)
     {
-        //Serial.println("PM error: checksum failure");
+#ifdef DEBUG
+        Serial.println("PM error: checksum failure");
+#endif
         return false;
     }
 
@@ -108,9 +127,14 @@ Serial.println();
     return true;
 }
 
-void *ParticleSensor::Read(uint32_t timeout)
+ParticleReading *ParticleSensor::Read()
 {
-    struct pms5003data data;
-    TIMEOUT_READ(Read(&pm_sensor, &data), timeout);
+    return this->Read(DEFAULT_READ_TIMEMOUT_MS);
+}
+
+ParticleReading *ParticleSensor::Read(uint32_t timeoutMs)
+{
+    pms5003data data;
+    TIMEOUT_READ(Read(&data), timeoutMs);
     return new ParticleReading(&data);
 }
