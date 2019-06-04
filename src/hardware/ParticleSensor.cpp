@@ -1,70 +1,17 @@
 #include "ParticleSensor.h"
-#include <SoftwareSerial.h>
-#include "../pins.h"
 
-// http://aqicn.org/sensor/pms5003-7003/
-// This study also show linear correlation between PM10 and PM2.5 reading
-// It also shows likelly functional dependancy of standarf (CF1) and Atmospheric Environment (env) reading
-// Looks like CF1 is normalized data that adheres to some standart, we should be using it for render
-struct pms5003data
-{
-    uint16_t framelen;
-    uint16_t pm10_standard;
-    uint16_t pm25_standard;
-    uint16_t pm100_standard;
-    uint16_t pm10_env;
-    uint16_t pm25_env;
-    uint16_t pm100_env;
-    uint16_t particles_03um;
-    uint16_t particles_05um;
-    uint16_t particles_10um;
-    uint16_t particles_25um;
-    uint16_t particles_50um;
-    uint16_t particles_100um;
-    uint16_t unused;
-    uint16_t checksum;
-};
 
-ParticleReading::ParticleReading(pms5003data *data)
-{
-    if (data == nullptr)
-    {
-        return;
-    }
-
-    this->pm10_standard = data->pm10_standard;
-    this->pm25_standard = data->pm25_standard;
-    this->pm100_standard = data->pm100_standard;
-    this->pm10_env = data->pm10_env;
-    this->pm25_env = data->pm25_env;
-    this->pm100_env = data->pm100_env;
-    this->particles_03um = data->particles_03um;
-    this->particles_05um = data->particles_05um;
-    this->particles_10um = data->particles_10um;
-    this->particles_25um = data->particles_25um;
-    this->particles_50um = data->particles_50um;
-    this->particles_100um = data->particles_100um;
-}
 
 ParticleSensor::ParticleSensor()
 {
-    // For UNO and others without hardware serial, we must use software serial.b
-    // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
-
-    this->pm_sensor = new SoftwareSerial(PIN_PM_SERIAL, PIN_PM_UNUSED);
-        
     // PM sensor baud rate is 9600
-    this->pm_sensor->begin(9600);
+    this->pm_sensor.begin(9600);
 }
 
-ParticleSensor::~ParticleSensor()
+bool ParticleSensor::ReadInternal(ParticleReading *o)
 {
-    delete this->pm_sensor;
-}
-
-bool ParticleSensor::ReadInternal(pms5003data *o)
-{
-    Stream *s = this->pm_sensor;
+    Stream *s = &this->pm_sensor;
+    o->success = false;
 
     if (!s->available())
     {
@@ -130,17 +77,32 @@ bool ParticleSensor::ReadInternal(pms5003data *o)
     }
 
     // success!
+    o->success = true;
     return true;
 }
 
-ParticleReading *ParticleSensor::Read()
+ParticleReading ParticleSensor::Read()
 {
-    return this->Read(UINT32_MAX);
+    ParticleReading data;
+    TIMEOUT_READ(ReadInternal(&data), data, UINT32_MAX);
+    return data;
+
+/*
+    ParticleReading data;
+
+    do
+    {
+        data = this->Read(DEFAULT_READ_TIMEMOUT_MS);
+    } 
+    while (!data.success);
+    
+    return data;
+/**/
 }
 
-ParticleReading *ParticleSensor::Read(uint32_t timeoutMs)
+ParticleReading ParticleSensor::Read(uint32_t timeoutMs)
 {
-    pms5003data data;
-    TIMEOUT_READ(ReadInternal(&data), timeoutMs);
-    return new ParticleReading(&data);
+    ParticleReading data;
+    TIMEOUT_READ(ReadInternal(&data), data, timeoutMs);
+    return data;
 }

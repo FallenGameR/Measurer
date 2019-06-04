@@ -1,6 +1,8 @@
 #ifndef PINS_H
 #define PINS_H
 
+#include <Arduino.h>
+
 /// TFT pins
 // For the Arduino Mega, use digital pins 22 through 29
 // The control pins for the LCD can be assigned to any digital or

@@ -2,15 +2,17 @@
 #define PARTICLE_SENSOR_H
 
 #include <Arduino.h>
+#include <SoftwareSerial.h>
+#include "../pins.h"
 
-#define TIMEOUT_READ(readOperation, timeoutMs)   \
+#define TIMEOUT_READ(readOperation, default_return, timeoutMs)   \
     {                                            \
         auto started = millis();                 \
         while (!(readOperation))                 \
         {                                        \
             if (millis() - started >= timeoutMs) \
             {                                    \
-                return nullptr;                  \
+                return default_return;           \
             }                                    \
             else                                 \
             {                                    \
@@ -19,17 +21,18 @@
         }                                        \
     }
 
-class SoftwareSerial;
-struct pms5003data;
-
 #define DEFAULT_READ_TIMEMOUT_MS 1000
 
 // https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
 // PM10 and more likelly can be ignored. Looks like the sensor just multiplies P2.5 reading to output P10
 
-class ParticleReading
+// http://aqicn.org/sensor/pms5003-7003/
+// This study also show linear correlation between PM10 and PM2.5 reading
+// It also shows likelly functional dependancy of standarf (CF1) and Atmospheric Environment (env) reading
+// Looks like CF1 is normalized data that adheres to some standart, we should be using it for render
+struct ParticleReading
 {
-public:
+    uint16_t framelen;
     uint16_t pm10_standard;
     uint16_t pm25_standard;
     uint16_t pm100_standard;
@@ -42,22 +45,23 @@ public:
     uint16_t particles_25um;
     uint16_t particles_50um;
     uint16_t particles_100um;
-
-    ParticleReading(pms5003data *data);
+    uint16_t unused;
+    uint16_t checksum;
+    bool success;
 };
-
 
 class ParticleSensor
 {
 private:
-    SoftwareSerial *pm_sensor;
-    bool ReadInternal(pms5003data *o);
+    // For UNO and others without hardware serial, we must use software serial.b
+    // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
+    SoftwareSerial pm_sensor = SoftwareSerial(PIN_PM_SERIAL, PIN_PM_UNUSED);
+    bool ReadInternal(ParticleReading *o);
 
 public:
     ParticleSensor();
-    ~ParticleSensor();
-    ParticleReading *Read();
-    ParticleReading *Read(uint32_t timeoutMs);
+    ParticleReading Read();
+    ParticleReading Read(uint32_t timeoutMs);
 };
 
 #endif

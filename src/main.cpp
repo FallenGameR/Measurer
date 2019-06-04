@@ -11,33 +11,8 @@ void setup(void)
   //PmSetup();
 }
 
-
-
-class Test
-{
-public:
-  int value = 5;
-
-  Test()
-  {
-    value = 6;
-  }
-};
-
-Test function()
-{
-  Test result;
-  result.value = 42;
-  return result;
-}
-
 void loop(void)
 {
-  Test val = function();
-  Serial.println(val.value);
-  delay(3000);
-  return;
-
   // Clear screen
   tft.fillScreen(BLACK);
 

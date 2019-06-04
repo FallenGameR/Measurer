@@ -8,15 +8,11 @@ ParticleSensor pmSensor;
 
 void DrawPmSensor()
 {
-    ParticleReading *data = pmSensor.Read();
-    // NULL case
-    // auto pointers
+    ParticleReading data = pmSensor.Read();
 
     double x = 0;
-    double y = 0;  //data->particles_03um; //
+    double y = data.particles_03um; //
     double sd = 100;
-
-    //delete data;
 
     // x interval:
     // 1 min = 60 sec
@@ -46,11 +42,9 @@ void DrawPmSensor()
         data = pmSensor.Read();
 
         line.xhi = x;
-        line.yhi = data->particles_03um; //
+        line.yhi = data.particles_03um; //
         Graph(tft, screen, plot, line, GREEN);
         delay(1000);
-
-        delete data;
 
         //Serial.print("PM 1.0 (ug / m^3): ");
         //Serial.println(data.pm10_standard);
