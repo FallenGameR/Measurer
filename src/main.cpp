@@ -8,7 +8,7 @@ void setup(void)
 {
   Serial.begin(115200);
   TftSetup();
-  PmSetup();
+  //PmSetup();
 }
 
 void loop(void)

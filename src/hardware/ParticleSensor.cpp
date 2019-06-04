@@ -135,7 +135,7 @@ bool ParticleSensor::ReadInternal(pms5003data *o)
 
 ParticleReading *ParticleSensor::Read()
 {
-    return this->Read(DEFAULT_READ_TIMEMOUT_MS * 10);
+    return this->Read(UINT32_MAX);
 }
 
 ParticleReading *ParticleSensor::Read(uint32_t timeoutMs)
