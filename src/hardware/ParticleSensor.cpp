@@ -48,7 +48,13 @@ ParticleReading::ParticleReading(pms5003data *data)
 
 ParticleSensor::ParticleSensor()
 {
+    // For UNO and others without hardware serial, we must use software serial.b
+    // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
+
     this->pm_sensor = new SoftwareSerial(PIN_PM_SERIAL, PIN_PM_UNUSED);
+        
+    // PM sensor baud rate is 9600
+    this->pm_sensor->begin(9600);
 }
 
 ParticleSensor::~ParticleSensor()
@@ -129,7 +135,7 @@ bool ParticleSensor::ReadInternal(pms5003data *o)
 
 ParticleReading *ParticleSensor::Read()
 {
-    return this->Read(DEFAULT_READ_TIMEMOUT_MS);
+    return this->Read(DEFAULT_READ_TIMEMOUT_MS * 10);
 }
 
 ParticleReading *ParticleSensor::Read(uint32_t timeoutMs)

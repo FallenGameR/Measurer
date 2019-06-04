@@ -1,10 +1,12 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include <SoftwareSerial.h>
-#include "..\pins.h"
+
 #include "..\graph.h"
 
+#include "ParticleSensor.h"
+
+/*
 // For UNO and others without hardware serial, we must use software serial.
 // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
 SoftwareSerial pm_sensor(PIN_PM_SERIAL, PIN_PM_UNUSED);
@@ -25,13 +27,19 @@ struct pms5003data
     uint16_t unused;
     uint16_t checksum;
 };
+/**/
+
+ParticleSensor pmSensor;
 
 void PmSetup()
 {
+    /*
     // PM sensor baud rate is 9600
     pm_sensor.begin(9600);
+    /**/
 }
 
+/*
 boolean ReadPmSensor(Stream *s, pms5003data *o)
 {
     if (!s->available())
@@ -65,13 +73,6 @@ boolean ReadPmSensor(Stream *s, pms5003data *o)
         sum += buffer[i];
     }
 
-    /* debugging
-    for (uint8_t i=2; i<32; i++) {
-        Serial.print("0x"); Serial.print(buffer[i], HEX); Serial.print(", ");
-    }
-    Serial.println();
-    */
-
     // The pm_sensor_data comes in endian'd, this solves it so it works on all platforms
     uint16_t buffer_u16[15];
     for (uint8_t i = 0; i < 15; i++)
@@ -101,7 +102,9 @@ void ReadPmSensor(pms5003data *data)
         delay(1);
     }
 }
+/**/
 
+/*
 void ReadPmSensor()
 {
     struct pms5003data pm_sensor_data;
@@ -132,15 +135,18 @@ void ReadPmSensor()
     Serial.print("Particles > 50 um / 0.1 L air:");
     Serial.println(pm_sensor_data.particles_100um);
 }
-
+/**/
 void DrawPmSensor()
 {
-    struct pms5003data data; //
-    ReadPmSensor(&data);     //
+    ParticleReading *data = pmSensor.Read();
+    // NULL case
+    // auto pointers
 
     double x = 0;
-    double y = data.particles_03um; //
+    double y = data->particles_03um; //
     double sd = 100;
+
+    delete data;
 
     // x interval:
     // 1 min = 60 sec
@@ -167,11 +173,14 @@ void DrawPmSensor()
     // Draw graph
     for (double x = 1; x <= 60; x += 1)
     {
-        ReadPmSensor(&data); //
+        data = pmSensor.Read();
+
         line.xhi = x;
-        line.yhi = data.particles_03um; //
+        line.yhi = data->particles_03um; //
         Graph(tft, screen, plot, line, GREEN);
         delay(1000);
+
+        delete data;
 
         //Serial.print("PM 1.0 (ug / m^3): ");
         //Serial.println(data.pm10_standard);

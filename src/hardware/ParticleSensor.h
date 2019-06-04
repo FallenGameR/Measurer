@@ -1,6 +1,8 @@
 #ifndef PARTICLE_SENSOR_H
 #define PARTICLE_SENSOR_H
 
+#include <Arduino.h>
+
 #define TIMEOUT_READ(readOperation, timeoutMs)   \
     {                                            \
         auto started = millis();                 \
@@ -18,6 +20,8 @@
     }
 
 class SoftwareSerial;
+struct pms5003data;
+
 #define DEFAULT_READ_TIMEMOUT_MS 1000
 
 // https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
@@ -46,18 +50,14 @@ public:
 class ParticleSensor
 {
 private:
-    // For UNO and others without hardware serial, we must use software serial.b
-    // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
-
     SoftwareSerial *pm_sensor;
-    bool ReadInternal();
+    bool ReadInternal(pms5003data *o);
 
 public:
     ParticleSensor();
     ~ParticleSensor();
     ParticleReading *Read();
     ParticleReading *Read(uint32_t timeoutMs);
-}
-
+};
 
 #endif
