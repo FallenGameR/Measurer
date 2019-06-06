@@ -1,7 +1,5 @@
 #include "ParticleSensor.h"
 
-
-
 ParticleSensor::ParticleSensor()
 {
     // PM sensor baud rate is 9600
@@ -15,9 +13,7 @@ bool ParticleSensor::ReadInternal(ParticleReading *o)
 
     if (!s->available())
     {
-#ifdef DEBUG
-        Serial.println("PM error: no data available");
-#endif
+        DEBUG_PRINT("PM error: no data available");
         return false;
     }
 
@@ -25,18 +21,14 @@ bool ParticleSensor::ReadInternal(ParticleReading *o)
     if (s->peek() != 0x42)
     {
         s->read();
-#ifdef DEBUG
-        Serial.println("PM error: waiting for the start byte");
-#endif
+        DEBUG_PRINT("PM error: waiting for the start byte");
         return false;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
-#ifdef DEBUG
-        Serial.println("PM error: not enough data to deserialize");
-#endif
+        DEBUG_PRINT("PM error: not enough data to deserialize");
         return false;
     }
 
@@ -70,9 +62,7 @@ bool ParticleSensor::ReadInternal(ParticleReading *o)
 
     if (sum != o->checksum)
     {
-#ifdef DEBUG
-        Serial.println("PM error: checksum failure");
-#endif
+        DEBUG_PRINT("PM error: checksum failure");
         return false;
     }
 

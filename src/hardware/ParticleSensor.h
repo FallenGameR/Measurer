@@ -21,6 +21,13 @@
         }                                        \
     }
 
+#ifdef DEBUG
+    #define DEBUG_PRINT(message) Serial.println(F(message));
+#else
+    #define DEBUG_PRINT(message) ;
+#endif
+
+
 #define DEFAULT_READ_TIMEMOUT_MS 1000
 
 // https://www.researchgate.net/publication/320555036_Particle_Distribution_Dependent_Inaccuracy_of_the_Plantower_PMS5003_low-cost_PM-sensor
@@ -53,8 +60,8 @@ struct ParticleReading
 class ParticleSensor
 {
 private:
-    // For UNO and others without hardware serial, we must use software serial.b
-    // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected
+    // For UNO and others without hardware serial, we must use software serial.
+    // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected.
     SoftwareSerial pm_sensor = SoftwareSerial(PIN_PM_SERIAL, PIN_PM_UNUSED);
     bool ReadInternal(ParticleReading *o);
 

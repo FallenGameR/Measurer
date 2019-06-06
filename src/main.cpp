@@ -17,18 +17,17 @@ void loop(void)
   tft.fillScreen(BLACK);
 
   // Draw termistor reading (1s)
-  //DrawTemperatureTermistor();
+  // DrawTemperatureTermistor();
 
 
   DrawPmSensor();
 }
 
 /*
+
 void setup()
 {
-
   BmeSetup();
-
   RtcSetup();
 }
 
@@ -36,11 +35,9 @@ void setup()
 
 void loop()
 {
-
-
-  //DrawPmSensor();  // does nothing
-  //ReadPmSensor();  // hangs even output from the setup
-  //delay(1000);
+  // DrawPmSensor();  // does nothing
+  // ReadPmSensor();  // hangs even output from the setup
+  // delay(1000);
 
   // BME - works
   // DATA:    256
@@ -52,6 +49,5 @@ void loop()
   // DATA:    138
   // PROGRAM: 1182
   //RtcRead();
-
 }
 /**/
