@@ -5,28 +5,34 @@
 #include <SoftwareSerial.h>
 #include "../pins.h"
 
-#define TIMEOUT_READ(readOperation, default_return, timeoutMs)   \
-    {                                            \
-        auto started = millis();                 \
-        while (!(readOperation))                 \
-        {                                        \
-            if (millis() - started >= timeoutMs) \
-            {                                    \
-                return default_return;           \
-            }                                    \
-            else                                 \
-            {                                    \
-                delay(1);                        \
-            }                                    \
-        }                                        \
-    }
+#define TIMEOUT_READ(readOperation, dataType, timeoutMs)    \
+    {                                                       \
+        auto started = millis();                            \
+        dataType data;                                      \
+        bool isTimeout = false;                             \
+        bool isFirstExecution = true;                       \
+        do                                                  \
+        {                                                   \
+            if (isFirstExecution)                           \
+            {                                               \
+                isFirstExecution = false;                   \
+            }                                               \
+            else                                            \
+            {                                               \
+                delay(1);                                   \
+            }                                               \
+            readOperation(&data);                           \
+            isTimeout = millis() - started >= timeoutMs;    \
+        }                                                   \
+        while (!data.success && !isTimeout);                \
+        return data;                                        \
+    } 
 
 #ifdef DEBUG
     #define DEBUG_PRINT(message) Serial.println(F(message));
 #else
     #define DEBUG_PRINT(message) ;
 #endif
-
 
 #define DEFAULT_READ_TIMEMOUT_MS 1000
 
@@ -63,7 +69,7 @@ private:
     // For UNO and others without hardware serial, we must use software serial.
     // First pin is IN from sensor (TX pin on sensor), leave other pin disconnected.
     SoftwareSerial pm_sensor = SoftwareSerial(PIN_PM_SERIAL, PIN_PM_UNUSED);
-    bool ReadInternal(ParticleReading *o);
+    void ReadInternal(ParticleReading *o);
 
 public:
     ParticleSensor();

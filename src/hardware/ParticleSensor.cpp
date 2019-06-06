@@ -6,41 +6,36 @@ ParticleSensor::ParticleSensor()
     this->pm_sensor.begin(9600);
 }
 
-bool ParticleSensor::ReadInternal(ParticleReading *o)
+void ParticleSensor::ReadInternal(ParticleReading *o)
 {
     Stream *s = &this->pm_sensor;
     o->success = false;
 
+    // Check if sensor is ready
     if (!s->available())
     {
-        DEBUG_PRINT("PM error: no data available");
-        return false;
+        DEBUG_PRINT("PS error: no data available");
+        return;
     }
 
     // Read a byte at a time until we get to the special '0x42' start-byte
     if (s->peek() != 0x42)
     {
         s->read();
-        DEBUG_PRINT("PM error: waiting for the start byte");
-        return false;
+        DEBUG_PRINT("PS error: waiting for the start byte");
+        return;
     }
 
     // Now read all 32 bytes
     if (s->available() < 32)
     {
-        DEBUG_PRINT("PM error: not enough data to deserialize");
-        return false;
+        DEBUG_PRINT("PS error: not enough data to deserialize");
+        return;
     }
 
+    // Read current buffer
     uint8_t buffer[32];
-    uint16_t sum = 0;
     s->readBytes(buffer, 32);
-
-    // get checksum ready
-    for (uint8_t i = 0; i < 30; i++)
-    {
-        sum += buffer[i];
-    }
 
 #ifdef DEBUG
     for (uint8_t i=2; i<32; i++) {
@@ -49,50 +44,40 @@ bool ParticleSensor::ReadInternal(ParticleReading *o)
     Serial.println();
 #endif
 
-    // The pm_sensor_data comes in endian'd, this solves it so it works on all platforms
+    // The sensor comes in endian, convert it so it could be used on all platforms
     uint16_t buffer_u16[15];
     for (uint8_t i = 0; i < 15; i++)
     {
-        buffer_u16[i] = buffer[2 + i * 2 + 1];
-        buffer_u16[i] += (buffer[2 + i * 2] << 8);
+        buffer_u16[i] = buffer[2 + i*2 + 1];
+        buffer_u16[i] += buffer[2 + i*2] << 8;
     }
 
-    // put it into a nice struct :)
+    // Fill in the output structure
     memcpy((void *)o, (void *)buffer_u16, 30);
+
+    // Check the checksum
+    uint16_t sum = 0;
+    for (uint8_t i = 0; i < 30; i++)
+    {
+        sum += buffer[i];
+    }
 
     if (sum != o->checksum)
     {
-        DEBUG_PRINT("PM error: checksum failure");
-        return false;
+        DEBUG_PRINT("PS error: checksum failure");
+        return;
     }
 
-    // success!
+    // Report read success
     o->success = true;
-    return true;
 }
 
 ParticleReading ParticleSensor::Read()
 {
-    ParticleReading data;
-    TIMEOUT_READ(ReadInternal(&data), data, UINT32_MAX);
-    return data;
-
-/*
-    ParticleReading data;
-
-    do
-    {
-        data = this->Read(DEFAULT_READ_TIMEMOUT_MS);
-    } 
-    while (!data.success);
-    
-    return data;
-/**/
+    TIMEOUT_READ(ReadInternal, ParticleReading, UINT32_MAX);
 }
 
 ParticleReading ParticleSensor::Read(uint32_t timeoutMs)
 {
-    ParticleReading data;
-    TIMEOUT_READ(ReadInternal(&data), data, timeoutMs);
-    return data;
+    TIMEOUT_READ(ReadInternal, ParticleReading, timeoutMs);
 }
