@@ -17,7 +17,7 @@ void ParticleSensor::ReadInternal(ParticleReading *o)
         DEBUG_PRINT("PS error: no data available");
         return;
     }
-
+    
     // Read a byte at a time until we get to the special '0x42' start-byte
     if (s->peek() != 0x42)
     {

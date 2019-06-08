@@ -70,7 +70,7 @@ void InitializeGrid(
         d.setCursor(screen.xlo + LEGEND_PADDING_Y_HORIZONTAL, temp + LEGEND_PADDING_Y_VERTICAL);
         d.print((int)y);
     }
-
+ 
     // Axis x
     for (double x = plot.xlo + xinc; x <= plot.xhi; x += xinc)
     {
